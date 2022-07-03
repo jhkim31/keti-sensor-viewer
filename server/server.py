@@ -23,7 +23,26 @@ def get_image():
     if os.path.exists(image_path):
         return send_file(image_path, mimetype='image/png')
     else:
-        return 0
+        return "0"
+
+@app.route('/push_image', methods=['POST'])
+def file_upload():
+    file = request.files['file']    
+    print(file)
+    factory, floor = file.filename.split(',')
+    try:
+        dir_path = f'./factory/{factory}'
+        file_path = os.path.join(dir_path, f'{floor}.png')
+        if not os.path.exists(dir_path):
+            os.mkdir(dir_path)
+        
+        print(file_path)
+        file.save(file_path)
+        return 'OK'
+    except Exception as e:
+        print(e)
+        return "0"
+    
 
 @app.route('/test')
 def test():
@@ -97,7 +116,7 @@ def handle_post():
 
 @app.route('/add-floor', methods=['POST'])
 def add_floor():
-    params = json.loads(request.get_data(), encoding='utf-8')
+    params = json.loads(request.get_data())
     if len(params) == 0:
         return 'No parameter'
     factory = params['factory']  
@@ -110,7 +129,7 @@ def add_floor():
 
 @app.route('/delete-floor', methods=['POST'])
 def delete_floor():
-    params = json.loads(request.get_data(), encoding='utf-8')
+    params = json.loads(request.get_data())
     if len(params) == 0:
         return 'No parameter'
     factory = params['factory']  
@@ -124,7 +143,7 @@ def delete_floor():
 @app.route('/add_node_position', methods=['POST'])
 def add_node():
     global sensor_position
-    params = json.loads(request.get_data(), encoding='utf-8')
+    params = json.loads(request.get_data())
     if len(params) == 0:
         return 'No parameter'
     factory = params['factory']
@@ -141,7 +160,7 @@ def add_node():
 @app.route('/delete_node_position', methods=['POST'])
 def delete_node():
     global sensor_position
-    params = json.loads(request.get_data(), encoding='utf-8')
+    params = json.loads(request.get_data())
     if len(params) == 0:
         return 'No parameter'
     factory = params['factory']
@@ -158,18 +177,6 @@ def delete_node():
     print(return_data)
     return return_data
 
-@app.route('/uploader', methods=['POST'])
-def file_upload():
-    file = request.files['file']    
-    factory, floor = file.filename.split(',')
-    dir_path = f'./factory/{factory}'
-    file_path = os.path.join(dir_path, f'{floor}.png')
-    if not os.path.exists(dir_path):
-        os.mkdir(dir_path)
 
-    
-    print(file_path)
-    file.save(file_path)
-    return 'OK'
 app.run(host="0.0.0.0")
 

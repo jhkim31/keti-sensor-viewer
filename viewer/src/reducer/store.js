@@ -9,6 +9,7 @@ const DOWN_STAIR = "DOWN_STAIR"
 const UP_STAIR = "UP_STAIR"
 const SET_SELECTED_GATEWAY = "SET_SELECTED_GATEWAY"
 const NODE_MOVE_STOP = "NODE_MOVE_STOP"
+const RE_RENDER = "RE_RENDER"
 
 function reducer(current_state = init_state, action) {
   let new_state = { ...current_state }
@@ -96,13 +97,20 @@ function reducer(current_state = init_state, action) {
           in_gateway_node: show_node_list,
           selected_gateway: gateway
         }
+        break;
       
-
     case NODE_MOVE_STOP:
       new_state = {
         ...current_state,
         selected_sensor: action.data.item,
         sensor_position: action.data.sensor_position
+      }
+      break;
+    
+    case RE_RENDER:      
+      new_state = {
+        ...current_state,
+        update_time: action.data.update_time
       }
       break;
   }
@@ -120,5 +128,6 @@ export {
   UP_STAIR,
   DOWN_STAIR,
   SET_SELECTED_GATEWAY,
-  NODE_MOVE_STOP
+  NODE_MOVE_STOP,
+  RE_RENDER
 }

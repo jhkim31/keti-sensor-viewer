@@ -33,29 +33,25 @@ const LiComp = styled.li`
 `
 const ImgBox = styled.img`         
     display:inline-block;
-    width:auto;
+    width:100%;
     height:100%;     
     object-fit:contain;
 `
 const NodeViewerComponent = () => {    
     const map_index = useSelector(state => state.map_index);
-    const map_list = useSelector(state => state.map_list)
-    const selected_factory = useSelector(state => state.selected_factory)    
+    const map_list = useSelector(state => state.map_list);
+    const selected_factory = useSelector(state => state.selected_factory);
+    const update_time = useSelector(state => state.update_time);            //rerender
     return (
         <NodeSpace>
             <BGSpace>
                 <ULComp map_index={map_index}>                
                     {map_list.map((map, idx) => {                                                
+                        const img_url = `http://localhost:5000/get_image?factory=${selected_factory}&floor=0&timestamp=${new Date().getTime()}`
                         return (
                             <LiComp key={idx + map}>                            
-                                <ImgBox 
-                                    src={
-                                        // map+`?time=${new Date().getTime()}`
-                                        "http://localhost:5000/get_image?factory=doosan&floor=0"
-                                    }
-                                    id={selected_factory + "_map_" + idx}
-                                />                                                                    
-                            </LiComp>
+                                <ImgBox src={img_url}/>                                           
+                            </LiComp>                            
                         )
                     })}
                 </ULComp>

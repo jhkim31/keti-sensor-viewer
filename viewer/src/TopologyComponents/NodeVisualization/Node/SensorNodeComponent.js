@@ -96,14 +96,17 @@ const SensorNodeComponent = ({
                 };
                 const url = "/sensor-position";                       
                 sensor_data_api.post(url, post_data)         
-                .then(d => {     
-                    const node_move_stop_action = {
-                        type: NODE_MOVE_STOP,
-                        data: d.data
-                    }
-                    if (d.status == 200)
+                .then(d => {                         
+                    if (d.status == 200){
+                        const node_move_stop_action = {
+                            type: NODE_MOVE_STOP,
+                            data: {
+                                item: item,
+                                sensor_position: d.data.sensor_position
+                            }
+                        }
                         dispatch(node_move_stop_action)                        
-                                                                         
+                    }                                                                         
                 })  
             }}
         >

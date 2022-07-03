@@ -16,25 +16,10 @@ const WrapperDIV = styled.div`
         "node_space";    
 `
 
-const TopologyComponent = ({
-    properties,
-    factory_select_event
-}) => {        
-    const sensor_list = useSelector((state) => {
-        const all_sensor = state.useable_sensor_by_factory
-        return all_sensor.length != 0 && state.selected_factory ? Object.keys(all_sensor[state.selected_factory]) : []        
-    })    
-    const visulazation_sensor_list = useSelector((state) => Object.keys(state.sensor_position))
-    const non_visulazation_sensor_list = sensor_list.filter(x => !visulazation_sensor_list.includes(x));    
-    
+const TopologyComponent = () => {                
     return (
         <WrapperDIV>            
-            {/* <MapControlButtonComponent
-                properties={properties}          
-                non_visulazation_sensor_list={non_visulazation_sensor_list}
-                factory_select_event={factory_select_event}   
-                visulazation_sensor_list={visulazation_sensor_list}
-            />  */}
+            <MapControlButtonComponent/> 
             <NodeViewerComponent/>                      
         </WrapperDIV>
     );

@@ -3,6 +3,8 @@ import styled from "styled-components";
 import sensor_data_api from "../../API/sensor_data";
 import Btn from "../../Btn";
 import { config } from "../../config";
+import { useSelector, useDispatch } from "react-redux";
+import { RE_RENDER } from "../../reducer/store";
 
 const PopupItem = styled.div`
     z-index: 999;
@@ -33,11 +35,17 @@ const MapPreview = styled.div`
     height:80%;
     background: no-repeat center/80% url(${props => props.url_new == '' ? props.url_origin : props.url_new });  
 `
-const FloorEditPopupComponent = ({
-    properties
-}) => {
+const FloorEditPopupComponent = () => {
+    const dispatch = useDispatch();
+    const selected_factory = useSelector(state => state.selected_factory);
     const [is_show, set_is_show] = useState(false);
     const [ImageSrc, setImageSrc] = useState('');    
+    const [upload_file, set_upload_file] = useState({});
+
+    const img_url = `http://localhost:5000/get_image?factory=${selected_factory}&floor=0&timestamp=${new Date().getTime()}`
+    console.log("selected_factory : ", selected_factory);    
+    const open = () => { set_is_show(true); };
+    const close = () => { set_is_show(false); };    
 
     const encodeFileToBase64 = (fileBlob) => {
         const reader = new FileReader();
@@ -50,67 +58,54 @@ const FloorEditPopupComponent = ({
         });
       };
 
-    const open = () => {
-        set_is_show(true);
-    };
-
-    const close = () => {
-        set_is_show(false);
-    };
-
     const post_file = () => {
-        const url = '/uploader';
+        const url = '/push_image';
         const formData = new FormData();
         formData.append(
             'file',
             upload_file,
-            `${properties.main_state.selected_factory},${properties.main_state.current_floor}`
+            `${selected_factory},${0}`
         );
         const config = {
             headers: {
                 "content-type": "multipart/form-data"
             }
         };
-        sensor_data_api.post(url, formData, config)        
+        sensor_data_api.post(url, formData, config)      
+        .then(d => {
+            if (d.status == 200 && d.data == "OK"){
+                setImageSrc('');
+                dispatch({
+                    type: RE_RENDER,
+                    data: {
+                        update_time: new Date().toString()
+                    }
+                });                
+            }
+        })  
     }
-    const [upload_file, set_upload_file] = useState({});
+    
     return (
         <WrapDiv>
-            <Btn
-                onClick={() => {
-                    open()
-                }}                                   
-                value={"Map Edit"}
-            />
+            <Btn value={"Map Edit"} onClick={() => open()} />                                   
             {           
                 is_show && 
                 <PopupBackground>
                     <PopupItem>
+                        <button onClick={() => close()} style={{float:"right"}}>close</button>                        
+                        <MapPreview url_origin={img_url} url_new={ImageSrc}/>                                                                                                                            
                         <button
                             onClick={() => {
-                                close()
+                                
+                                post_file();
+                                close();                                
                             }}
                             style={{
                                 float:"right",
                             }}
-                        >close</button>                        
-                        <MapPreview
-                            url_origin={properties.main_data.map_list[properties.main_state.current_floor - properties.main_state.min_floor]+`?time=${new Date().getTime()}`}
-                            url_new={ImageSrc}
-                        />                                            
-                        <button
-                            onClick={() => {
-                                post_file()
-                                close()
-                                properties.set_main_state({
-                                    ...properties.main_state,                    
-                                    "update_time" : new Date().toString()                    
-                                })
-                            }}
-                            style={{
-                                float:"right",
-                            }}
-                        >save</button>   
+                        >
+                            save
+                        </button>   
 
                         <input 
                             type="file"
@@ -121,8 +116,7 @@ const FloorEditPopupComponent = ({
                             style={{
                                 float:"right",
                             }}
-                        />                              
-                        
+                        />                                                  
                     </PopupItem>     
                 </PopupBackground>           
             }
