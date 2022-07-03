@@ -4,7 +4,9 @@ import FloorEditPopupComponent from "../Popup/FloorEditPopupComponent";
 import NodeAddPopup from "../Popup/NodeAddPopup";
 import NodeDeletePopup from "../Popup/NodeDeletePopup";
 import sensor_data_api from "../../API/sensor_data";
-import Btn from "./Btn";
+import Btn from "../../Btn";
+import { UP_STAIR, DOWN_STAIR } from "../../reducer/store";
+import { useSelector, useDispatch } from "react-redux";
 
 const BtnSpace = styled.div`
     grid-area: btn_space;
@@ -15,40 +17,32 @@ const MapControlButtonComponent = ({
     non_visulazation_sensor_list,
     factory_select_event,
     visulazation_sensor_list
-}) => {
-    const [p1, set_p1] = useState(1)
+}) => {    
+    const dispatch = useDispatch();
     const down_stair = () => {     
-        if (properties.main_state.current_floor > properties.main_state.min_floor) {                        
-            let last_floor = properties.main_state.current_floor;
-            const min_floor = properties.main_state.min_floor;            
-            properties.set_main_state({
-                ...properties.main_state,
-                "current_floor" : last_floor - 1,
-                "map_index" : min_floor - (last_floor - 1)
-            })
-        }
+        
     }
 
     const up_stair = () => {        
-        if (properties.main_state.current_floor < properties.main_state.max_floor) {                        
-            let last_floor = properties.main_state.current_floor;
-            const min_floor = properties.main_state.min_floor;            
-            properties.set_main_state({
-                ...properties.main_state,
-                "current_floor" : last_floor + 1,
-                "map_index" : min_floor - (last_floor + 1)
-            })                                                                      
-        }
+
     }
     return (
         <BtnSpace>
             <Btn
-                onClick={down_stair}
+                onClick={() => {
+                    dispatch({
+                        type: DOWN_STAIR                        
+                    })
+                }}
                 value={"down"}
             />
             
             <Btn
-               onClick={up_stair}
+               onClick={() => {
+                dispatch({
+                    type: UP_STAIR
+                })
+               }}
                value={"up"}
             />            
             <Btn

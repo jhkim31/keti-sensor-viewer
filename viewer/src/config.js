@@ -10,10 +10,12 @@ export const config = {
         "border" : "1px solid black",
         "theme_color" : "#005082",
         "sidebar" : {
-            "hover_bg_color" : "#0270b5" ,
-            "font_size" : "20px",
-            "font_weight" : "bold",
-            "height" : "30px"
+            "item" : {
+                "hover_bg_color" : "#0270b5" ,
+                "font_size" : "20px",
+                "font_weight" : "bold",
+                "height" : "30px"
+            }
         },
         "info_component" : {
             "color" : "white"

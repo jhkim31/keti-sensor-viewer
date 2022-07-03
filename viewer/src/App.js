@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { get_keys, get_gateway} from "./lib";
 import SensorListComponent from "./SensorListComponents/SensorListComponent";
 import SidebarComponent from "./SidebarComponents/SidebarComponent";
-import TopologyComponent from "./MapComponents/TopologyComponent";
+import TopologyComponent from "./TopologyComponents/TopologyComponent";
 import styled from "styled-components";
 import sensor_data_api from "./API/sensor_data";
 import InfoComponent from "./InfoComponents/InfoComponent";
 import { config } from "./config";
+import { useDispatch } from "react-redux";
+import { SET_INIT_STATE } from "./reducer/store";
 
 const Wrapper = styled.div`
     display: grid;
@@ -35,7 +36,7 @@ const LayoutSensorList = styled.div`
 `
 
 const App = () => {        
-
+    const dispatch = useDispatch();
     const [main_state, set_main_state] = useState(config.init_state)
     const [main_data, set_main_data] = useState(config.init_data)    
 
@@ -46,27 +47,20 @@ const App = () => {
         "set_main_data" : set_main_data
     }
 
-    function get_sensor_data(){
-        console.log('test!')
-        sensor_data_api.get('/all-sensor-data')                    
-            .then(d => {
-                console.log(get_gateway(d.data))
-                set_main_state({
-                    ...main_state,                    
-                    "update_time" : new Date().toString()                    
+    useEffect(() => {        
+        const url = '/all-sensor-data'
+        sensor_data_api.get(url)
+        .then(d => {
+            if (d.status == 200){
+                dispatch({
+                    type: SET_INIT_STATE,
+                    data: d.data
                 })
-                set_main_data({
-                    ...main_data,
-                    "all_sensor_data" : d.data,
-                    "keti_useable_sensor_by_factory" : get_keys(d.data),
-                    "keti_factory_list" : Object.keys(get_keys(d.data)),
-                    "gateway_data" : get_gateway(d.data)
-                })                                
-            })    
-    }
-
-    useEffect(() => {
-        get_sensor_data();
+            }
+        })
+        .catch(e => {
+            console.log(e)
+        })                
     }, [])  
 
     const factory_select_event = (factory) => {             
@@ -79,15 +73,15 @@ const App = () => {
                     "min_floor" : d.data.factory_info.min_floor,                    
                     "max_floor" : d.data.factory_info.max_floor,                    
                     "current_floor" : d.data.factory_info.min_floor,
-                    "map_index" : 0      ,
-                    "selected_gateway" : ""      ,
+                    "map_index" : 0,
+                    "selected_gateway" : "",
                     "selected_sensor" : ""        
                 })
                 set_main_data({
                     ...main_data,
                     "map_list" : d.data.factory_info.floor,
                     "sensor_position" : d.data.sensor_position,
-                    "selected_factory_useable_sensor_type_list" : main_data.keti_useable_sensor_by_factory[factory],                    
+                    "selected_factory_useable_sensor_type_list" : main_data.useable_sensor_by_factory[factory],                    
                     "selected_factory_sensor_data" : main_data.all_sensor_data[factory],
                     "in_gateway_node" : []
                 })                            
@@ -96,26 +90,16 @@ const App = () => {
     
     return (
         <Wrapper>
-            <InfoComponent
-                main_state={main_state}
-            ></InfoComponent>            
+            <InfoComponent/>                            
             <LayoutSidebar>
-                <SidebarComponent
-                    properties={properties}                    
-                    factory_select_event={factory_select_event}
-                />
+                <SidebarComponent/>                                 
             </LayoutSidebar>            
             <TopologyComponent
                 properties={properties}             
                 factory_select_event={factory_select_event}
             ></TopologyComponent>            
             <LayoutSensorList>
-                <SensorListComponent 
-                    properties={properties}
-                    main_state={main_state}
-                    main_data={main_data}
-                    set_main_state={set_main_state}                  
-                />
+                <SensorListComponent/>
             </LayoutSensorList>
         </Wrapper>
     );

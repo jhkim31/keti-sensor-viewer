@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import styled from "styled-components";
 import sensor_data_api from "../../API/sensor_data";
-import Btn from "../ButtonComponent/Btn";
+import Btn from "../../Btn";
 import { config } from "../../config";
 
 const PopupItem = styled.div`

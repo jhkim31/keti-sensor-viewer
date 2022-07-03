@@ -24,8 +24,6 @@ def get_image():
         return send_file(image_path, mimetype='image/png')
     else:
         return 0
-    
-    
 
 @app.route('/test')
 def test():
@@ -42,13 +40,14 @@ def get_map_list():
     return_data[factory]['min_floor'] = 1
     return_data[factory]['max_floor'] = 5
     return jsonify(return_data)
+    
 @app.route('/all-sensor-data')
 def get_all_sensor_data():
     res = requests.get('http://europa.energyiotlab.com:30101/v1/sensors')
     return res.text
     #return json.dumps(json_data, indent=4)
 
-@app.route('/sensor-position-data')
+@app.route('/get-factory-data')
 def get_sensor_data():
     factory = request.args.get("factory")
     if request.args.get("floor") == None:
@@ -58,20 +57,23 @@ def get_sensor_data():
         data = sensor_position.loc[(sensor_position['factory'] == factory) & (sensor_position['floor'] == floor)]
     
     return_data = {}
-    return_data['sensor_position'] = {}
     return_data['factory_info'] = {}
-    for i in data.itertuples():
-        return_data['sensor_position'][i[2]] = {'x' : i[3], 'y' : i[4], 'floor' : i[5]}
+    return_data['sensor_position'] = {}
 
     with open(f'factory_info/{factory}.json', 'r') as f:
         json_data = json.load(f)
-    return_data['factory_info'] = json_data
+        return_data['factory_info'] = json_data    
+        return_data['factory_info']['factory'] = factory        
+
+    for i in data.itertuples():
+        return_data['sensor_position'][i[2]] = {'x' : i[3], 'y' : i[4], 'floor' : i[5]}
+
     return jsonify(return_data)
 
 @app.route('/sensor-position', methods=['POST'])
 def handle_post():
     global sensor_position
-    params = json.loads(request.get_data(), encoding='utf-8')
+    params = json.loads(request.get_data())
     if len(params) == 0:
         return 'No parameter'
     factory = params['factory']

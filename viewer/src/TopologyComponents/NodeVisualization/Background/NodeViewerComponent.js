@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import MapComponent from "../Node/MapComponent";
+import { useSelector } from "react-redux";
 
 const NodeSpace = styled.div`
     position: relative;    
@@ -36,34 +37,30 @@ const ImgBox = styled.img`
     height:100%;     
     object-fit:contain;
 `
-const NodeViewerComponent = ({
-    properties
-}) => {    
+const NodeViewerComponent = () => {    
+    const map_index = useSelector(state => state.map_index);
+    const map_list = useSelector(state => state.map_list)
+    const selected_factory = useSelector(state => state.selected_factory)    
     return (
         <NodeSpace>
             <BGSpace>
-                <ULComp
-                    map_index={properties.main_state.map_index}
-                >   
-                    {properties.main_data.map_list.map((map, idx) => {                                                
+                <ULComp map_index={map_index}>                
+                    {map_list.map((map, idx) => {                                                
                         return (
-                            <LiComp
-                                key={idx + map}
-                            >
+                            <LiComp key={idx + map}>                            
                                 <ImgBox 
-                                    src={map+`?time=${new Date().getTime()}`}
-                                    id={properties.main_state.selected_factory + "_map_" + idx}
-                                >
-                                    
-                                </ImgBox>
+                                    src={
+                                        // map+`?time=${new Date().getTime()}`
+                                        "http://localhost:5000/get_image?factory=doosan&floor=0"
+                                    }
+                                    id={selected_factory + "_map_" + idx}
+                                />                                                                    
                             </LiComp>
                         )
                     })}
                 </ULComp>
             </BGSpace>
-            <MapComponent
-                properties={properties}             
-            />
+            <MapComponent/>
         </NodeSpace>
     );
 };
