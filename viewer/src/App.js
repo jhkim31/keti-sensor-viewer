@@ -7,6 +7,7 @@ import styled from "styled-components";
 import sensor_data_api from "./API/sensor_data";
 import InfoComponent from "./InfoComponents/InfoComponent";
 import { config } from "./config";
+
 const Wrapper = styled.div`
     display: grid;
     height: 100%;
