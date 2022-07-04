@@ -1,6 +1,7 @@
 import { init_state } from "./Main_State";
 import { createStore } from 'redux';
 import { get_keys, get_gateway } from "../lib";
+import { useMediaQuery } from "react-responsive";
 
 const SET_SELECTED_FACTORY = 'SET_SELECTED_FACTORY'
 const SET_SELECTED_SENSOR = 'SET_SELECTED_SENSOR'
@@ -11,12 +12,12 @@ const SET_SELECTED_GATEWAY = "SET_SELECTED_GATEWAY"
 const NODE_MOVE_STOP = "NODE_MOVE_STOP"
 const RE_RENDER = "RE_RENDER"
 
+
 function reducer(current_state = init_state, action) {
   let new_state = { ...current_state }
 
   switch (action.type) {
-
-    case SET_INIT_STATE:
+    case SET_INIT_STATE:      
       new_state = {
         ...current_state,
         update_time: new Date().toString(),

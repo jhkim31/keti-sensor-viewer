@@ -3,8 +3,8 @@ import styled from "styled-components";
 import MapControlButtonComponent from "./ButtonComponent/MapControlButtonComponent";
 import NodeViewerComponent from "./NodeVisualization/Background/NodeViewerComponent";
 
-const WrapperDIV = styled.div`
-    border:1px solid black;
+const WrapperDIV = styled.div`    
+    height:100%;
     display: grid;
     overflow:hidden;    
     grid-template-rows: 40px 1fr;

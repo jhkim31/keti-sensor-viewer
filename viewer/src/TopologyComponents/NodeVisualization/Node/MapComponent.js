@@ -12,7 +12,6 @@ const MapContainer = styled.div`
   
 const MapComponent = () => {
     const selected_factory_sensor_data = useSelector(state => state.selected_factory ? state.all_sensor_data[state.selected_factory] : {})        
-    
     const sensor_id_list = useSelector(state => {        
         const sensor_data = state.all_sensor_data;
         let selected_factory_sensor_data = {};

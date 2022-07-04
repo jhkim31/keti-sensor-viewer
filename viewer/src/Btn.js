@@ -15,6 +15,7 @@ const Btn_Style = styled.div`
     background-color: ${props => (props.bg_color == undefined ? config.layout.button.bg_color : props.bg_color)};
     color: ${props => (props.color == undefined ? config.layout.button.color : props.color)};;
     margin-right:5px;
+    margin-bottom:3px;
     :hover{
         background-color: ${config.layout.button.hover_bg_color};
         color: ${config.layout.button.hover_color};

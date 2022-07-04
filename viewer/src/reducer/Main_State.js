@@ -15,12 +15,8 @@ const init_state = {
     "map_index" : 0,
     "update_time" : 0,    
     
-    
-    
-    
-    
     "gateway_data" : {},
-    "in_gateway_node" : []    
+    "in_gateway_node" : []
 }
 
 
