@@ -32,8 +32,7 @@ const SensorListRowComponent = ({
         let end_date_str = ''
         let mode = ""
         let last_data_time_str = ''
-        try{
-            debugger;
+        try{            
             end_time = new Date(selected_factory_sensor_data[sensor_id].service.timestamp * 1000)
             start_time = new Date(end_time - 3600000)
             start_date_str = `${start_time.getYear() + 1900}/${start_time.getMonth() + 1}/${start_time.getDate()}-${start_time.getHours()}:${start_time.getMinutes()}:${start_time.getSeconds()}`
@@ -71,7 +70,7 @@ const SensorListRowComponent = ({
         >
             <TableCell><b>{mode}</b></TableCell>
             <TableCell>                
-                <a href={tsdb_url}>{sensor_id}</a>                                    
+                <a href={tsdb_url} target='_blank'>{sensor_id}</a>                                    
             </TableCell>
             <TableCell>
                 {last_data_time_str}

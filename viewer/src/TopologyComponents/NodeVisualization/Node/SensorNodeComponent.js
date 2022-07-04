@@ -5,6 +5,7 @@ import sensor_data_api from "../../../API/sensor_data";
 import { config } from "../../../config";
 import { useSelector, useDispatch } from "react-redux";
 import { NODE_MOVE_STOP } from "../../../reducer/store";
+import { useMediaQuery } from "react-responsive";
 
 const SensorNode = styled.div`
     cursor: ${config.layout.sensor_node.cursor};
@@ -46,17 +47,23 @@ const SensorNodeComponent = ({
     mode,
     item
 }) => {        
+    const is_mobile = useMediaQuery({ maxDeviceWidth: 1199 })
     const dispatch = useDispatch();
     
     const [isShown, set_isShown] = useState(false);    
     const selected_factory = useSelector(state => state.selected_factory);
     const selected_sensor = useSelector(state => state.selected_sensor);
     const sensor_position = useSelector(state => state.sensor_position[item]);
-
     const selected_factory_sensor_data = useSelector(state => state.selected_factory ? state.all_sensor_data[state.selected_factory] : {})        
-
-    const width = window.innerWidth - 200;
-    const height = config.layout.topology_component.height;    
+    let width = 0, height = 0;
+    if (is_mobile){
+        width = window.innerWidth;
+        height = config.mobile_layout.topology_component_height;    
+    } else {
+        width = window.innerWidth - 200;
+        height = config.layout.topology_component.height;    
+    }
+    
     const left = sensor_position.x * width;
     const top = sensor_position.y * height; 
     let service_time = ""
