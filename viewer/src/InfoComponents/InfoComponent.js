@@ -23,10 +23,8 @@ const InfoComponent = () => {
     })
     return (
         <Info>
-            <h1>selected factory : {selected_factory}</h1>
-            <h2>current floor : {current_floor}</h2>
-            <h2>select sensor : {selected_sensor}</h2>
-            <h3>update time : {update_time}</h3>
+            <h1>selected factory : {selected_factory}</h1>            
+            <h2>select sensor : {selected_sensor}</h2>            
         </Info>
     );
 };

@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import MapComponent from "../Node/MapComponent";
 import { useSelector } from "react-redux";
+import { config } from "../../../config";
 
 const NodeSpace = styled.div`
     position: relative;    
@@ -42,12 +43,13 @@ const NodeViewerComponent = () => {
     const map_list = useSelector(state => state.map_list);
     const selected_factory = useSelector(state => state.selected_factory);
     const update_time = useSelector(state => state.update_time);            //rerender
+    const base_url = config.base_url;
     return (
         <NodeSpace>
             <BGSpace>
                 <ULComp map_index={map_index}>                
                     {map_list.map((map, idx) => {                                                
-                        const img_url = `http://localhost:5000/get_image?factory=${selected_factory}&floor=0&timestamp=${new Date().getTime()}`
+                        const img_url = `${base_url}/get_image?factory=${selected_factory}&floor=0&timestamp=${new Date().getTime()}`
                         return (
                             <LiComp key={idx + map}>                            
                                 <ImgBox src={img_url}/>                                           

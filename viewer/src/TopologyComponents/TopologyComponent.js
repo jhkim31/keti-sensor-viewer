@@ -2,8 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import MapControlButtonComponent from "./ButtonComponent/MapControlButtonComponent";
 import NodeViewerComponent from "./NodeVisualization/Background/NodeViewerComponent";
-import { useSelector } from "react-redux";
-
 
 const WrapperDIV = styled.div`
     border:1px solid black;

@@ -37,15 +37,6 @@ const LayoutSensorList = styled.div`
 
 const App = () => {        
     const dispatch = useDispatch();
-    const [main_state, set_main_state] = useState(config.init_state)
-    const [main_data, set_main_data] = useState(config.init_data)    
-
-    const properties = {
-        "main_state" : main_state,
-        "set_main_state" : set_main_state,
-        "main_data" : main_data,
-        "set_main_data" : set_main_data
-    }
 
     useEffect(() => {        
         const url = '/all-sensor-data'
@@ -62,31 +53,6 @@ const App = () => {
             console.log(e)
         })                
     }, [])  
-
-    const factory_select_event = (factory) => {             
-        const url = `/sensor-position-data?factory=${factory}`;        
-        sensor_data_api.get(url)        
-            .then(d => {                                
-                set_main_state({
-                    ...main_state,                    
-                    "selected_factory" : factory,
-                    "min_floor" : d.data.factory_info.min_floor,                    
-                    "max_floor" : d.data.factory_info.max_floor,                    
-                    "current_floor" : d.data.factory_info.min_floor,
-                    "map_index" : 0,
-                    "selected_gateway" : "",
-                    "selected_sensor" : ""        
-                })
-                set_main_data({
-                    ...main_data,
-                    "map_list" : d.data.factory_info.floor,
-                    "sensor_position" : d.data.sensor_position,
-                    "selected_factory_useable_sensor_type_list" : main_data.useable_sensor_by_factory[factory],                    
-                    "selected_factory_sensor_data" : main_data.all_sensor_data[factory],
-                    "in_gateway_node" : []
-                })                            
-            })                
-    };
     
     return (
         <Wrapper>
@@ -94,10 +60,7 @@ const App = () => {
             <LayoutSidebar>
                 <SidebarComponent/>                                 
             </LayoutSidebar>            
-            <TopologyComponent
-                properties={properties}             
-                factory_select_event={factory_select_event}
-            ></TopologyComponent>            
+            <TopologyComponent/>
             <LayoutSensorList>
                 <SensorListComponent/>
             </LayoutSensorList>

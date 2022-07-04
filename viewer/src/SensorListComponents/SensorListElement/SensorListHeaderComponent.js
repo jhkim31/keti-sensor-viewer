@@ -18,6 +18,7 @@ const SensorListHeaderComponent = () => {
         <TR>
             <TableHeaderCell key="is_router" className="cell">mode</TableHeaderCell>            
             <TableHeaderCell key="name" className="cell">sensor_name</TableHeaderCell>            
+            <TableHeaderCell key="last_data" className="cell">last_data</TableHeaderCell>
             { 
                 selected_factory_useable_sensor_type_list.map((item) => {
                     return <TableHeaderCell key={item}>{item}</TableHeaderCell>

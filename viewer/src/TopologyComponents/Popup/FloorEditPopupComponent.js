@@ -41,8 +41,9 @@ const FloorEditPopupComponent = () => {
     const [is_show, set_is_show] = useState(false);
     const [ImageSrc, setImageSrc] = useState('');    
     const [upload_file, set_upload_file] = useState({});
+    const base_url = config.base_url;
 
-    const img_url = `http://localhost:5000/get_image?factory=${selected_factory}&floor=0&timestamp=${new Date().getTime()}`
+    const img_url = `${base_url}/get_image?factory=${selected_factory}&floor=0&timestamp=${new Date().getTime()}`
     console.log("selected_factory : ", selected_factory);    
     const open = () => { set_is_show(true); };
     const close = () => { set_is_show(false); };    
