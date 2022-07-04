@@ -1,19 +1,19 @@
 export const config = {
-    "base_url" : {
-        "develop" : "http://localhost:5000/",
-        "deployment" : "http://192.168.101.118:5000/"
-    },
+    "base_url" : "http://192.168.101.237:5000/"    ,
+    // "base_url" : "http://localhost:5000", 
     "layout" : {
-        "row" : ["150px",  "400px", "1fr"],
+        "row" : ["80px",  "400px", "1fr"],
         "col" : ["200px", "1fr"],
         "topology_component_height" : 360,
         "border" : "1px solid black",
         "theme_color" : "#005082",
         "sidebar" : {
-            "hover_bg_color" : "#0270b5" ,
-            "font_size" : "20px",
-            "font_weight" : "bold",
-            "height" : "30px"
+            "item" : {
+                "hover_bg_color" : "#0270b5" ,
+                "font_size" : "20px",
+                "font_weight" : "bold",
+                "height" : "30px"
+            }
         },
         "info_component" : {
             "color" : "white"
@@ -46,26 +46,5 @@ export const config = {
             "bg" : "white",
             "selected_bg" : "red"
         }
-    },
-    "init_state" : {
-        "selected_factory" : "",
-        "selected_sensor" : "",
-        "min_floor" : 0,
-        "max_floor" : 0,
-        "current_floor" : 0,
-        "map_index" : 0,
-        "update_time" : 0,
-        "selected_gateway" : ""
-    },
-    "init_data" : {
-        "all_sensor_data" : {},
-        "keti_factory_list" : [],
-        "keti_useable_sensor_by_factory" : [],
-        "selected_factory_useable_sensor_type_list" : [],
-        "selected_factory_sensor_data" : {},
-        "sensor_position" : {},
-        "map_list" : [],
-        "gateway_data" : {},
-        "in_gateway_node" : []
     }
 }
