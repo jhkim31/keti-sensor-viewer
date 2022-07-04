@@ -3,7 +3,7 @@ import SidebarItem from "./SidebarItem";
 import { useSelector } from "react-redux";
 
 
-const SidebarComponent = () => {   
+const SidebarComponent = ( {set_show_sidebar} ) => {   
     const factory_list = useSelector((state) => {
         return state.factory_list
     })     
@@ -14,7 +14,8 @@ const SidebarComponent = () => {
                     return (
                         <SidebarItem                            
                             key={factory_name}                            
-                            factory_name={factory_name}                                                     
+                            factory_name={factory_name}
+                            set_show_sidebar={set_show_sidebar}                                                                                 
                         /> 
                     )
                 })
