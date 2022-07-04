@@ -23,8 +23,25 @@ def get_image():
     if os.path.exists(image_path):
         return send_file(image_path, mimetype='image/png')
     else:
-        return 0
-    
+        return "0"
+
+@app.route('/push_image', methods=['POST'])
+def file_upload():
+    file = request.files['file']    
+    print(file)
+    factory, floor = file.filename.split(',')
+    try:
+        dir_path = f'./factory/{factory}'
+        file_path = os.path.join(dir_path, f'{floor}.png')
+        if not os.path.exists(dir_path):
+            os.mkdir(dir_path)
+        
+        print(file_path)
+        file.save(file_path)
+        return 'OK'
+    except Exception as e:
+        print(e)
+        return "0"
     
 
 @app.route('/test')
@@ -42,13 +59,14 @@ def get_map_list():
     return_data[factory]['min_floor'] = 1
     return_data[factory]['max_floor'] = 5
     return jsonify(return_data)
+    
 @app.route('/all-sensor-data')
 def get_all_sensor_data():
     res = requests.get('http://europa.energyiotlab.com:30101/v1/sensors')
     return res.text
     #return json.dumps(json_data, indent=4)
 
-@app.route('/sensor-position-data')
+@app.route('/get-factory-data')
 def get_sensor_data():
     factory = request.args.get("factory")
     if request.args.get("floor") == None:
@@ -58,20 +76,23 @@ def get_sensor_data():
         data = sensor_position.loc[(sensor_position['factory'] == factory) & (sensor_position['floor'] == floor)]
     
     return_data = {}
-    return_data['sensor_position'] = {}
     return_data['factory_info'] = {}
-    for i in data.itertuples():
-        return_data['sensor_position'][i[2]] = {'x' : i[3], 'y' : i[4], 'floor' : i[5]}
+    return_data['sensor_position'] = {}
 
     with open(f'factory_info/{factory}.json', 'r') as f:
         json_data = json.load(f)
-    return_data['factory_info'] = json_data
+        return_data['factory_info'] = json_data    
+        return_data['factory_info']['factory'] = factory        
+
+    for i in data.itertuples():
+        return_data['sensor_position'][i[2]] = {'x' : i[3], 'y' : i[4], 'floor' : i[5]}
+
     return jsonify(return_data)
 
 @app.route('/sensor-position', methods=['POST'])
 def handle_post():
     global sensor_position
-    params = json.loads(request.get_data(), encoding='utf-8')
+    params = json.loads(request.get_data())
     if len(params) == 0:
         return 'No parameter'
     factory = params['factory']
@@ -95,7 +116,7 @@ def handle_post():
 
 @app.route('/add-floor', methods=['POST'])
 def add_floor():
-    params = json.loads(request.get_data(), encoding='utf-8')
+    params = json.loads(request.get_data())
     if len(params) == 0:
         return 'No parameter'
     factory = params['factory']  
@@ -108,7 +129,7 @@ def add_floor():
 
 @app.route('/delete-floor', methods=['POST'])
 def delete_floor():
-    params = json.loads(request.get_data(), encoding='utf-8')
+    params = json.loads(request.get_data())
     if len(params) == 0:
         return 'No parameter'
     factory = params['factory']  
@@ -122,7 +143,7 @@ def delete_floor():
 @app.route('/add_node_position', methods=['POST'])
 def add_node():
     global sensor_position
-    params = json.loads(request.get_data(), encoding='utf-8')
+    params = json.loads(request.get_data())
     if len(params) == 0:
         return 'No parameter'
     factory = params['factory']
@@ -139,7 +160,7 @@ def add_node():
 @app.route('/delete_node_position', methods=['POST'])
 def delete_node():
     global sensor_position
-    params = json.loads(request.get_data(), encoding='utf-8')
+    params = json.loads(request.get_data())
     if len(params) == 0:
         return 'No parameter'
     factory = params['factory']
@@ -156,18 +177,6 @@ def delete_node():
     print(return_data)
     return return_data
 
-@app.route('/uploader', methods=['POST'])
-def file_upload():
-    file = request.files['file']    
-    factory, floor = file.filename.split(',')
-    dir_path = f'./factory/{factory}'
-    file_path = os.path.join(dir_path, f'{floor}.png')
-    if not os.path.exists(dir_path):
-        os.mkdir(dir_path)
 
-    
-    print(file_path)
-    file.save(file_path)
-    return 'OK'
 app.run(host="0.0.0.0")
 
