@@ -46,7 +46,7 @@ const NodeViewerComponent = () => {
     const base_url = config.base_url;
     return (
         <NodeSpace>
-            <BGSpace>
+            {/* <BGSpace>
                 <ULComp map_index={map_index}>                
                     {map_list.map((map, idx) => {                                                
                         const img_url = `${base_url}/get_image?factory=${selected_factory}&floor=0&timestamp=${new Date().getTime()}`
@@ -57,7 +57,7 @@ const NodeViewerComponent = () => {
                         )
                     })}
                 </ULComp>
-            </BGSpace>
+            </BGSpace> */}
             <MapComponent/>
         </NodeSpace>
     );
