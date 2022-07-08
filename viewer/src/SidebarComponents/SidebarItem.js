@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { config } from "../config";
 import { useSelector, useDispatch } from "react-redux";
-import { SET_SELECTED_FACTORY } from "../reducer/store";
+import { SELECT_FACTORY } from "../reducer/store";
 import sensor_data_api from "../API/sensor_data";
 import { useMediaQuery } from "react-responsive";
 
@@ -29,9 +29,7 @@ const SidebarItem = ({
 }) => {
     const dispatch = useDispatch()
     const is_mobile = useMediaQuery({ maxDeviceWidth: 1199 })
-    const selected_factory = useSelector((state) => {
-        return state.selected_factory;
-    })    
+    const selected_factory = useSelector((state) => state.selected_factory)
     return (
         <SidebarItemLi            
             selected_factory={selected_factory}
@@ -44,7 +42,7 @@ const SidebarItem = ({
                 .then(d => {                    
                     if (d.status == 200){                        
                         dispatch({
-                            type: SET_SELECTED_FACTORY,
+                            type: SELECT_FACTORY,
                             data: d.data
                         })                                                 
                     }                    

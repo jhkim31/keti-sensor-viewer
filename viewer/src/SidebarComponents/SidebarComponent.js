@@ -4,9 +4,7 @@ import { useSelector } from "react-redux";
 
 
 const SidebarComponent = ( {set_show_sidebar} ) => {   
-    const factory_list = useSelector((state) => {
-        return state.factory_list
-    })     
+    const factory_list = useSelector((state) => state.factory_list)
     return (
         <ul>
             {                               

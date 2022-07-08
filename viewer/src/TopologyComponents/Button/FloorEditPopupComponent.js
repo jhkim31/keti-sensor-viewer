@@ -4,7 +4,7 @@ import sensor_data_api from "../../API/sensor_data";
 import Btn from "../../Btn";
 import { config } from "../../config";
 import { useSelector, useDispatch } from "react-redux";
-import { RE_RENDER } from "../../reducer/store";
+import { UPDATE_IMAGE_SIZE } from "../../reducer/store";
 
 const PopupItem = styled.div`
     z-index: 999;
@@ -74,15 +74,17 @@ const FloorEditPopupComponent = () => {
         };
         sensor_data_api.post(url, formData, config)      
         .then(d => {
-            if (d.status == 200 && d.data == "OK"){
+            if (d.status == 200){
                 setImageSrc('');
                 dispatch({
-                    type: RE_RENDER,
+                    type: UPDATE_IMAGE_SIZE,
                     data: {
-                        update_time: new Date().toString()
+                        width : d.data.width,
+                        height : d.data.height,                                                
                     }
                 });                
             }
+            close();    
         })  
     }
     
@@ -96,10 +98,8 @@ const FloorEditPopupComponent = () => {
                         <button onClick={() => close()} style={{float:"right"}}>close</button>                        
                         <MapPreview url_origin={img_url} url_new={ImageSrc}/>                                                                                                                            
                         <button
-                            onClick={() => {
-                                
-                                post_file();
-                                close();                                
+                            onClick={() => {                                
+                                post_file();                                                            
                             }}
                             style={{
                                 float:"right",

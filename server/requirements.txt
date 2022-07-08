@@ -3,3 +3,4 @@ pandas
 flask_cors
 flask_restx
 requests
+Pillow

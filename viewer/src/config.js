@@ -39,7 +39,7 @@ export const config = {
             "height" : 360
         },
         "popup" : {
-            "bg_color" : "yellow",
+            "bg_color" : "green",
             "bg_alpha" : 0.4,
         },
         "sensor_list" : {

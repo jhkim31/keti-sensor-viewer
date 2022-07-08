@@ -83,8 +83,10 @@ const App = () => {
             console.log(e)
         })                
     }, [])      
+
     const is_mobile = useMediaQuery({ maxDeviceWidth: 1199 })
     const [show_sidebar, set_show_sidebar] = useState("hidden")
+    
     return (                  
         <>
         {

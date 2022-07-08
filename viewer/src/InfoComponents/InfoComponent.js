@@ -16,35 +16,33 @@ const Hbutton = styled.div`
 
 const InfoComponent = ({set_show_sidebar}) => {
     const is_mobile = useMediaQuery({ maxDeviceWidth: 1199 })
-    const selected_factory = useSelector((state) => {
-        return state.selected_factory;
-    })    
-    const selected_sensor = useSelector((state) => {
-        return state.selected_sensor;
-    })        
-    
+    const {selected_factory, selected_node} = useSelector(state => ({
+        selected_factory: state.selected_factory,
+        selected_node: state.selected_node
+    }))    
+    const update_time = useSelector(state => state.update_time)
+    function toggle_sidebar(){
+        set_show_sidebar((visible) => {
+            console.log(visible);
+            if (visible == "hidden")
+                return "visible"
+            else
+                return "hidden"
+        })
+    }
     return (
         <Info>      
             {
                 !is_mobile && <div>
                     <h1>selected factory : {selected_factory}</h1>            
-                    <h2>select sensor : {selected_sensor}</h2>                            
+                    <h2>select sensor : {selected_node}</h2>                            
                 </div>
             }     
             {
                 is_mobile && <div>
-                    <Hbutton
-                    onClick={() => {
-                        set_show_sidebar((visible) => {
-                            console.log(visible);
-                            if (visible == "hidden")
-                                return "visible"
-                            else
-                                return "hidden"
-                        })
-                    }}>show factory</Hbutton>
+                    <Hbutton onClick={toggle_sidebar}>show factory</Hbutton>
                 <h3>selected factory : {selected_factory}</h3>            
-                <h4>select sensor : {selected_sensor}</h4>                            
+                <h4>select sensor : {selected_node}</h4>                            
             </div>
             }                 
             

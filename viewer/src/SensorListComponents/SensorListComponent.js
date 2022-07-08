@@ -5,13 +5,11 @@ import styled from "styled-components";
 import Btn from "../Btn";
 import { config } from "../config";
 import { useSelector, useDispatch } from "react-redux";
-import { SET_SELECTED_GATEWAY } from "../reducer/store";
+import { SELECT_GATEWAY } from "../reducer/store";
 
 
 const TableContainer = styled.div`
-    ${(props) => {
-        return "width:" + props.size + 'px;'
-    }}
+    ${(props) => "width:" + props.size + 'px;'}        
     border-spacing: 0;        
 `
 
@@ -19,20 +17,18 @@ const SensorListTable = styled.table`
     width:100%;
 `
 const GatewayWrapper = styled.div`
-    background:${config.layout.theme_color};
-    // height:35px;
-    // position:sticky;
-    // top: 0;
+    background:${config.layout.theme_color};    
 `
 
 const SensorListComponent = () => {        
     const dispatch = useDispatch();
     
-    const selected_factory_useable_sensor_type_list = useSelector(state => state.selected_factory ? state.useable_sensor_by_factory[state.selected_factory] : [])                
-    const selected_factory_sensor_data = useSelector(state => state.selected_factory ? state.all_sensor_data[state.selected_factory] : {})        
+    const selected_factory_useable_sensor_list = useSelector(state => state.selected_factory_useable_sensor_list)
+    const selected_factory_sensor_data = useSelector(state => state.selected_factory_sensor_data)        
     const selected_gateway = useSelector(state => state.selected_gateway)  
     const in_gateway_node = useSelector(state => state.in_gateway_node)
-    const selected_factory_gateway = useSelector(state => state.selected_factory ? state.gateway_data[state.selected_factory] : {})        
+    const selected_factory_gateway = useSelector(state => state.selected_factory_gateway)
+    const update_time = useSelector(state => state.update_time);
     const sensor_id_list = Object.keys(selected_factory_sensor_data)    
     const selected_factory_gateway_list = Object.keys(selected_factory_gateway)    
     
@@ -42,7 +38,7 @@ const SensorListComponent = () => {
             {            
                 selected_factory_gateway_list.map((gateway) => {      
                     const select_gateway_action = {
-                        type: SET_SELECTED_GATEWAY,
+                        type: SELECT_GATEWAY,
                         data: {
                             gateway: gateway                                        
                         } 
@@ -60,7 +56,7 @@ const SensorListComponent = () => {
         </GatewayWrapper>
        
         <TableContainer
-            size={(selected_factory_useable_sensor_type_list.length + 1) * 120}
+            size={(selected_factory_useable_sensor_list.length + 1) * 120}
         >
             <SensorListTable>
                 <thead>
