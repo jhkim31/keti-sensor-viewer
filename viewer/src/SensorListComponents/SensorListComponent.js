@@ -22,13 +22,14 @@ const GatewayWrapper = styled.div`
 
 const SensorListComponent = () => {        
     const dispatch = useDispatch();
+    const update_time = useSelector(state => state.update_time);
     
     const selected_factory_useable_sensor_list = useSelector(state => state.selected_factory_useable_sensor_list)
     const selected_factory_sensor_data = useSelector(state => state.selected_factory_sensor_data)        
+    const selected_factory_gateway = useSelector(state => state.selected_factory_gateway)
     const selected_gateway = useSelector(state => state.selected_gateway)  
     const in_gateway_node = useSelector(state => state.in_gateway_node)
-    const selected_factory_gateway = useSelector(state => state.selected_factory_gateway)
-    const update_time = useSelector(state => state.update_time);
+    
     const sensor_id_list = Object.keys(selected_factory_sensor_data)    
     const selected_factory_gateway_list = Object.keys(selected_factory_gateway)    
     
@@ -44,10 +45,11 @@ const SensorListComponent = () => {
                         } 
                     }
                     let button_color = config.layout.button.bg_color;                
-                    if (selected_gateway == gateway)
-                        button_color = "red"
+                    if (selected_gateway === gateway)
+                        button_color = "red"                        
                     return (
-                        <Btn key={gateway} value={gateway} bg_color={button_color}
+                        <Btn key={gateway} 
+                        value={(/^[A-Z0-9]{2}(:[A-Z0-9]{2}){5}$/).test(gateway) ? gateway : "error"} bg_color={button_color}
                             onClick={() => dispatch(select_gateway_action)}
                         />                    
                     )                                                    
@@ -72,7 +74,7 @@ const SensorListComponent = () => {
                         }
 
                         let show_sensor = false;
-                        if (selected_gateway == "")
+                        if (selected_gateway === "")
                             show_sensor = true
                         else 
                             if (in_gateway_node.includes(mac_addr))

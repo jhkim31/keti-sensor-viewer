@@ -45,7 +45,7 @@ const Mobile_LayoutSidebar = styled.div`
     position:fixed;
     top:0;
     left:0;
-    visibility:${props => props.show};        
+    visibility:${props => props.show ? "visible" : "hidden"};        
     width:200px;
     height:100%;
     border:${config.layout.border};
@@ -85,7 +85,7 @@ const App = () => {
     }, [])      
 
     const is_mobile = useMediaQuery({ maxDeviceWidth: 1199 })
-    const [show_sidebar, set_show_sidebar] = useState("hidden")
+    const [show_sidebar, set_show_sidebar] = useState(false)
     
     return (                  
         <>

@@ -9,7 +9,7 @@ const init_state = {
     selected_factory_sensor_data: {},
     selected_factory_gateway: [],    
 
-    useable_sensor_by_factory : [],    
+    useable_sensor_by_factory : {},    
     all_sensor_data : {},
     sensor_position : {},
     factory_list : [],    
@@ -21,6 +21,7 @@ const init_state = {
     in_gateway_node : [],
     node_fixed : true,
     show_edges : true,
+    signal : false,
 }
 
 

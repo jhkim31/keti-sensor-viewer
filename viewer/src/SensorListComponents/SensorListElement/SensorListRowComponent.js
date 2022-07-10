@@ -16,9 +16,9 @@ const TableCell = styled.td`
 `
 
 const SensorListRowComponent = ({
-        sensor_id, // 센서 아이디        
-        sensor_data, // 현재 센서의 센서 데이터                
-        row_index, // key를 위한 행 인덱스        
+        sensor_id,
+        sensor_data,
+        row_index,
     }) => {         
         const dispatch = useDispatch();       
         const selected_factory = useSelector(state => state.selected_factory);

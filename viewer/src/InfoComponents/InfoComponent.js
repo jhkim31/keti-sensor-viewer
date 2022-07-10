@@ -15,19 +15,22 @@ const Hbutton = styled.div`
 `
 
 const InfoComponent = ({set_show_sidebar}) => {
-    const is_mobile = useMediaQuery({ maxDeviceWidth: 1199 })
-    const {selected_factory, selected_node} = useSelector(state => ({
-        selected_factory: state.selected_factory,
-        selected_node: state.selected_node
-    }))    
+
     const update_time = useSelector(state => state.update_time)
-    function toggle_sidebar(){
-        set_show_sidebar((visible) => {
-            console.log(visible);
-            if (visible == "hidden")
-                return "visible"
-            else
-                return "hidden"
+
+    const is_mobile = useMediaQuery({ maxDeviceWidth: 1199 });
+    const selected_factory = useSelector(state => state.selected_factory );
+    const selected_node = useSelector(state => state.selected_node);
+    
+    function toggle_sidebar() {        
+        set_show_sidebar((visible) => {                        
+            if (visible == false){
+                console.log("hidden => visible")
+                return true
+            } else{
+                console.log("visible => hidden")
+                return false
+            }
         })
     }
     return (
@@ -41,9 +44,9 @@ const InfoComponent = ({set_show_sidebar}) => {
             {
                 is_mobile && <div>
                     <Hbutton onClick={toggle_sidebar}>show factory</Hbutton>
-                <h3>selected factory : {selected_factory}</h3>            
-                <h4>select sensor : {selected_node}</h4>                            
-            </div>
+                    <h3>selected factory : {selected_factory}</h3>            
+                    <h4>select sensor : {selected_node}</h4>                            
+                </div>
             }                 
             
         </Info>

@@ -2,7 +2,7 @@ import React from "react";
 import sensor_data_api from "../../API/sensor_data";
 import Btn from "../../Btn";
 import { useDispatch } from "react-redux";
-import { SET_INIT_STATE } from "../../reducer/store";
+import { FALSE_SIGNAL, SET_INIT_STATE } from "../../reducer/store";
 
 const RefreshBtn = () => {    
     const dispatch = useDispatch();
@@ -16,6 +16,7 @@ const RefreshBtn = () => {
                     type: SET_INIT_STATE,
                     data: d.data                    
                 })
+                dispatch({type: FALSE_SIGNAL})
             }
         })
         .catch(e => {

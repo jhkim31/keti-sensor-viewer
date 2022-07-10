@@ -4,7 +4,7 @@ import sensor_data_api from "../../API/sensor_data";
 import Btn from "../../Btn";
 import { config } from "../../config";
 import { useSelector, useDispatch } from "react-redux";
-import { UPDATE_IMAGE_SIZE } from "../../reducer/store";
+import { FALSE_SIGNAL, UPDATE_IMAGE_SIZE } from "../../reducer/store";
 
 const PopupItem = styled.div`
     z-index: 999;
@@ -82,7 +82,8 @@ const FloorEditPopupComponent = () => {
                         width : d.data.width,
                         height : d.data.height,                                                
                     }
-                });                
+                });
+                dispatch({type: FALSE_SIGNAL})                
             }
             close();    
         })  

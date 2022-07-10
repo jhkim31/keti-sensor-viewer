@@ -1,9 +1,11 @@
 import React, { useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Graph from "react-graph-vis";
 import { config } from "../config";
+import { TRUE_SIGNAL } from "../reducer/store";
 
 const MapComponent = () => {
+    const dispatch = useDispatch();
     const selected_factory = useSelector(state => state.selected_factory)
     const selected_factory_sensor_data = useSelector(state => state.selected_factory_sensor_data)
     const sensor_id_list = Object.keys(selected_factory_sensor_data)
@@ -16,20 +18,27 @@ const MapComponent = () => {
     const network_graph = useRef(null);
     const node_fixed = useSelector(state => state.node_fixed);
     const show_edges = useSelector(state => state.show_edges);
+    const signal = useSelector(state => state.signal)
     
     const base_url = config.base_url;
 
     let resize_rate = 1000 / Math.max(selected_factory_image_width, selected_factory_image_height);                                       
     const image_width = selected_factory_image_width * resize_rate;
     const image_height = selected_factory_image_height * resize_rate;
+    
+
     let image = new Image();    
-    image.src = `${base_url}/get_image?factory=${selected_factory}&floor=0&timestamp=${timestamp}`;
+    image.onload = () => {        
+        dispatch({type: TRUE_SIGNAL})
+    }
+
+    image.src = `${base_url}/get_image?factory=${selected_factory}&floor=0&timestamp=${timestamp}`;    
     let nodes = []
     let edges = []    
 
     const master_node = {
         id: "master",
-        label: "master",
+        label: "Internet AP",
         color: "black",
         x : 0,
         y : 0,        
@@ -60,13 +69,17 @@ const MapComponent = () => {
             color: "#000000"
         },
         height: `${config.layout.topology_component_height}px`,
-        physics: !node_fixed,
+        physics: {
+            enable : !node_fixed,
+            maxVelocity: 30,
+            minVelocity: 0.01
+        }
     };
 
     const events = {
         select: function (event) {            
             var { nodes, edges } = event;            
-        },
+        },        
         beforeDrawing: function () {            
             let canvas = undefined;
             if (network_graph.current != null)
@@ -74,10 +87,9 @@ const MapComponent = () => {
             if (canvas != undefined) {                
                 const ctx = canvas.getContext('2d')   
                 console.log(image.naturalWidth);
-                try{                                        
-                    if (image.naturalWidth > 0)                                                                      
-                        ctx.drawImage(image, -((selected_factory_image_width * resize_rate) / 2), -((selected_factory_image_height * resize_rate) / 2),selected_factory_image_width * resize_rate, selected_factory_image_height * resize_rate)                
-                    
+                try{                                             
+                    if(image.naturalWidth > 0)                                                                                            
+                        ctx.drawImage(image, -((selected_factory_image_width * resize_rate) / 2), -((selected_factory_image_height * resize_rate) / 2),selected_factory_image_width * resize_rate, selected_factory_image_height * resize_rate)                                    
                 } catch(e){                                        
                     console.log(e)
                 }
@@ -177,7 +189,7 @@ const MapComponent = () => {
     return (
         <>
             {
-                (Object.keys(selected_factory_sensor_data).length > 0) && <Graph
+                (Object.keys(selected_factory_sensor_data).length > 0) && signal && <Graph
                     ref={network_graph}
                     graph={graph}
                     options={options}

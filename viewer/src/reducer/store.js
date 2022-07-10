@@ -1,7 +1,6 @@
 import { init_state } from "./Main_State";
 import { createStore } from 'redux';
 import { get_keys, get_gateway } from "../lib";
-import { composeWithDevTools } from 'redux-devtools-extension';
 
 const SELECT_FACTORY = 'SELECT_FACTORY'
 const SELECT_SENSOR = 'SELECT_SENSOR'
@@ -14,6 +13,8 @@ const RE_RENDER = "RE_RENDER"
 const UPDATE_IMAGE_SIZE = "UPDATE_IMAGE_SIZE"
 const NODE_FIX_TOGGLE = "NODE_FIX_TOGGLE"
 const SHOW_EDGES_TOGGLE = "SHOW_EDGES_TOGGLE"
+const TRUE_SIGNAL = "TRUE_SIGNAL"
+const FALSE_SIGNAL = "FALSE_SIGNAL"
 
 function reducer(current_state = init_state, action) {
   let new_state = { ...current_state }
@@ -68,7 +69,7 @@ function reducer(current_state = init_state, action) {
         show_node_data[node] = current_state.all_sensor_data[current_state.selected_factory][node]
       })
 
-      if (current_state.selected_gateway == gateway) 
+      if (current_state.selected_gateway === gateway) 
         new_state = {
           ...current_state,
           in_gateway_node: [],
@@ -118,13 +119,26 @@ function reducer(current_state = init_state, action) {
         show_edges : !current_state.show_edges
       }
       break;
+
+    case FALSE_SIGNAL:
+      new_state = {
+        ...current_state,
+        signal : false
+      }
+      break;
+    case TRUE_SIGNAL: 
+      new_state = {
+        ...current_state,
+        signal : true
+      }
+      break;
   }
 
 
   return new_state
 }
 
-const store = createStore(reducer, composeWithDevTools())
+const store = createStore(reducer)
 
 export {
   store,
@@ -138,5 +152,7 @@ export {
   RE_RENDER,
   UPDATE_IMAGE_SIZE,
   NODE_FIX_TOGGLE,
-  SHOW_EDGES_TOGGLE
+  SHOW_EDGES_TOGGLE,
+  TRUE_SIGNAL,
+  FALSE_SIGNAL
 }

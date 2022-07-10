@@ -36,7 +36,7 @@ const SidebarItem = ({
             factory_name={factory_name}
             onClick={() => {
                 if (is_mobile)
-                    set_show_sidebar("hidden");                           
+                    set_show_sidebar(false);                           
                 const url = `/get-factory-data?factory=${factory_name}`;        
                 sensor_data_api.get(url)        
                 .then(d => {                    

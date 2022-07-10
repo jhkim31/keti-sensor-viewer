@@ -1,5 +1,4 @@
 import React from "react";
-import sensor_data_api from "../../API/sensor_data";
 import Btn from "../../Btn";
 import { useDispatch, useSelector } from "react-redux";
 import { SHOW_EDGES_TOGGLE } from "../../reducer/store";
