@@ -1,10 +1,5 @@
 {
-    "floor": [
-        "http://localhost:8000/doosan/1.png",
-        "http://localhost:8000/doosan/2.png",
-        "http://localhost:8000/doosan/2.png"
-    ],
-    "min_floor": 1,
-    "max_floor": 3,
-    "nfloor": 2
+    "width": 227,
+    "height": 222,
+    "factory": "doosan"
 }

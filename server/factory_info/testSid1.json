@@ -1,9 +1,5 @@
 {
-    "floor": [
-        "http://localhost:8000/testSid1/1.png",
-        "http://localhost:8000/testSid1/2.png"
-    ],
-    "min_floor": 1,
-    "max_floor": 0,
-    "nfloor": 2
+    "width": 1000,
+    "height": 1000,
+    "factory": "testSid1"
 }

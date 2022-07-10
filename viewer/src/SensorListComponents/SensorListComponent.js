@@ -5,13 +5,11 @@ import styled from "styled-components";
 import Btn from "../Btn";
 import { config } from "../config";
 import { useSelector, useDispatch } from "react-redux";
-import { SET_SELECTED_GATEWAY } from "../reducer/store";
+import { SELECT_GATEWAY } from "../reducer/store";
 
 
 const TableContainer = styled.div`
-    ${(props) => {
-        return "width:" + props.size + 'px;'
-    }}
+    ${(props) => "width:" + props.size + 'px;'}        
     border-spacing: 0;        
 `
 
@@ -19,20 +17,19 @@ const SensorListTable = styled.table`
     width:100%;
 `
 const GatewayWrapper = styled.div`
-    background:${config.layout.theme_color};
-    // height:35px;
-    // position:sticky;
-    // top: 0;
+    background:${config.layout.theme_color};    
 `
 
 const SensorListComponent = () => {        
     const dispatch = useDispatch();
+    const update_time = useSelector(state => state.update_time);
     
-    const selected_factory_useable_sensor_type_list = useSelector(state => state.selected_factory ? state.useable_sensor_by_factory[state.selected_factory] : [])                
-    const selected_factory_sensor_data = useSelector(state => state.selected_factory ? state.all_sensor_data[state.selected_factory] : {})        
+    const selected_factory_useable_sensor_list = useSelector(state => state.selected_factory_useable_sensor_list)
+    const selected_factory_sensor_data = useSelector(state => state.selected_factory_sensor_data)        
+    const selected_factory_gateway = useSelector(state => state.selected_factory_gateway)
     const selected_gateway = useSelector(state => state.selected_gateway)  
     const in_gateway_node = useSelector(state => state.in_gateway_node)
-    const selected_factory_gateway = useSelector(state => state.selected_factory ? state.gateway_data[state.selected_factory] : {})        
+    
     const sensor_id_list = Object.keys(selected_factory_sensor_data)    
     const selected_factory_gateway_list = Object.keys(selected_factory_gateway)    
     
@@ -42,16 +39,17 @@ const SensorListComponent = () => {
             {            
                 selected_factory_gateway_list.map((gateway) => {      
                     const select_gateway_action = {
-                        type: SET_SELECTED_GATEWAY,
+                        type: SELECT_GATEWAY,
                         data: {
                             gateway: gateway                                        
                         } 
                     }
                     let button_color = config.layout.button.bg_color;                
-                    if (selected_gateway == gateway)
-                        button_color = "red"
+                    if (selected_gateway === gateway)
+                        button_color = "red"                        
                     return (
-                        <Btn key={gateway} value={gateway} bg_color={button_color}
+                        <Btn key={gateway} 
+                        value={(/^[A-Z0-9]{2}(:[A-Z0-9]{2}){5}$/).test(gateway) ? gateway : "error"} bg_color={button_color}
                             onClick={() => dispatch(select_gateway_action)}
                         />                    
                     )                                                    
@@ -60,7 +58,7 @@ const SensorListComponent = () => {
         </GatewayWrapper>
        
         <TableContainer
-            size={(selected_factory_useable_sensor_type_list.length + 1) * 120}
+            size={(selected_factory_useable_sensor_list.length + 1) * 120}
         >
             <SensorListTable>
                 <thead>
@@ -76,7 +74,7 @@ const SensorListComponent = () => {
                         }
 
                         let show_sensor = false;
-                        if (selected_gateway == "")
+                        if (selected_gateway === "")
                             show_sensor = true
                         else 
                             if (in_gateway_node.includes(mac_addr))

@@ -1,9 +1,5 @@
 {
-    "floor": [
-        "http://localhost:8000/snu-vetmed/1.png",
-        "http://localhost:8000/snu-vetmed/2.png"
-    ],
-    "min_floor": 1,
-    "max_floor": 2,
-    "nfloor": 2
+    "width": 1000,
+    "height": 1000,
+    "factory": "snu-vetmed"
 }
