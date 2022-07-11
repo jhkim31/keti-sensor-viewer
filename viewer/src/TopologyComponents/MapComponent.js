@@ -2,12 +2,13 @@ import React, { useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Graph from "react-graph-vis";
 import { config } from "../config";
-import { TRUE_SIGNAL } from "../reducer/store";
+import { TRUE_SIGNAL, SELECT_NODE } from "../reducer/store";
 
 const MapComponent = () => {
     const dispatch = useDispatch();
     const selected_factory = useSelector(state => state.selected_factory)
     const selected_factory_sensor_data = useSelector(state => state.selected_factory_sensor_data)
+    const selected_node = useSelector(state => state.selected_node)
     const sensor_id_list = Object.keys(selected_factory_sensor_data)
     const sensor_position = useSelector(state => state.sensor_position)
     const selected_gateway = useSelector(state => state.selected_gateway)
@@ -25,7 +26,6 @@ const MapComponent = () => {
     let resize_rate = 1000 / Math.max(selected_factory_image_width, selected_factory_image_height);                                       
     const image_width = selected_factory_image_width * resize_rate;
     const image_height = selected_factory_image_height * resize_rate;
-    
 
     let image = new Image();    
     image.onload = () => {        
@@ -70,7 +70,7 @@ const MapComponent = () => {
         },
         height: `${config.layout.topology_component_height}px`,
         physics: {
-            enable : !node_fixed,
+            enabled : !node_fixed,
             maxVelocity: 30,
             minVelocity: 0.01
         }
@@ -80,13 +80,24 @@ const MapComponent = () => {
         select: function (event) {            
             var { nodes, edges } = event;            
         },        
+        click: function(event){
+            if (event.nodes.length > 0){
+                const node = event.nodes[0];
+                dispatch({
+                    type: SELECT_NODE,
+                    data: {
+                        selected_node: 'floe' + node.slice(0,2) + node.slice(-2)
+                    }
+                })
+            }
+            console.log(event)
+        },
         beforeDrawing: function () {            
             let canvas = undefined;
             if (network_graph.current != null)
                 canvas = network_graph.current.container.current.childNodes[0].childNodes[0];
             if (canvas != undefined) {                
-                const ctx = canvas.getContext('2d')   
-                console.log(image.naturalWidth);
+                const ctx = canvas.getContext('2d')                   
                 try{                                             
                     if(image.naturalWidth > 0)                                                                                            
                         ctx.drawImage(image, -((selected_factory_image_width * resize_rate) / 2), -((selected_factory_image_height * resize_rate) / 2),selected_factory_image_width * resize_rate, selected_factory_image_height * resize_rate)                                    
@@ -115,7 +126,19 @@ const MapComponent = () => {
             mac_addr = selected_factory_sensor_data[item].data.node_info[0].id.toUpperCase()
             const id = mac_addr.slice(-5)
             mode = selected_factory_sensor_data[item].data.node_info[1].info.mode;
-            const color = mode === "gateway" ? "red" : "blue";
+
+            let color = "gray"                        
+            if (mode == "gateway"){
+                color = "red"
+            } else {         
+                console.log(`selected: ${selected_node}, item : ${item}`)       
+                if (selected_node == item){
+                    color = "green"
+                } else {
+                    color = "blue"
+                }
+            }
+                 
             let x = 0;
             let y = 0;
             if (node_fixed){
