@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { config } from "../../config";
 import { useDispatch, useSelector } from "react-redux";
-import { SELECT_SENSOR } from "../../reducer/store";
+import { SELECT_NODE } from "../../reducer/store";
 
 const SelectSensorRow = styled.tr`
     ${(props) => {
@@ -58,7 +58,7 @@ const SensorListRowComponent = ({
             console.log("mode정보가 없습니다.");
         }
         const select_sensor_action = {
-            type: SELECT_SENSOR,
+            type: SELECT_NODE,
             data: {
                 selected_node: sensor_id
             }

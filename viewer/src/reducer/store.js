@@ -3,7 +3,7 @@ import { createStore } from 'redux';
 import { get_keys, get_gateway } from "../lib";
 
 const SELECT_FACTORY = 'SELECT_FACTORY'
-const SELECT_SENSOR = 'SELECT_SENSOR'
+const SELECT_NODE = 'SELECT_NODE'
 const SELECT_GATEWAY = "SELECT_GATEWAY"
 const SET_INIT_STATE = 'SET_INIT_STATE'
 const DOWN_STAIR = "DOWN_STAIR"
@@ -52,7 +52,7 @@ function reducer(current_state = init_state, action) {
       }      
       break;
 
-    case SELECT_SENSOR:
+    case SELECT_NODE:
       new_state = {
         ...current_state,
         selected_node: action.data.selected_node
@@ -143,7 +143,7 @@ const store = createStore(reducer)
 export {
   store,
   SELECT_FACTORY,
-  SELECT_SENSOR,
+  SELECT_NODE,
   SET_INIT_STATE,
   UP_STAIR,
   DOWN_STAIR,
