@@ -21,7 +21,7 @@ npm install
 
 ## 2. config.js 수정
 
-### /viewer/src/config.json
+### /viewer/src/config.js
 base_url 변경
 
 ## 2. npm 실행
