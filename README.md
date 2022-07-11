@@ -19,6 +19,11 @@ viewer디렉토리 에서
 npm install
 ```
 
+## 2. config.js 수정
+
+### /viewer/src/config.json
+base_url 변경
+
 ## 2. npm 실행
 ```bash
 npm start
