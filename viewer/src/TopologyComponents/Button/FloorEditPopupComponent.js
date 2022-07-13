@@ -53,6 +53,7 @@ const FloorEditPopupComponent = () => {
         reader.readAsDataURL(fileBlob);
         return new Promise((resolve) => {
           reader.onload = () => {
+            debugger;
             setImageSrc(reader.result);
             resolve();
           };

@@ -49,6 +49,7 @@ const MapComponent = () => {
         edges: edges
     }
     const options = {
+        autoResize: true,
         interaction: {
             zoomSpeed: 0.2,
             hover: true
@@ -80,7 +81,7 @@ const MapComponent = () => {
         select: function (event) {            
             var { nodes, edges } = event;            
         },        
-        click: function(event){
+        release: function(event){
             if (event.nodes.length > 0){
                 const node = event.nodes[0];
                 dispatch({
@@ -95,6 +96,7 @@ const MapComponent = () => {
         beforeDrawing: function () {            
             let canvas = undefined;
             if (network_graph.current != null)
+            debugger;
                 canvas = network_graph.current.container.current.childNodes[0].childNodes[0];
             if (canvas != undefined) {                
                 const ctx = canvas.getContext('2d')                   
