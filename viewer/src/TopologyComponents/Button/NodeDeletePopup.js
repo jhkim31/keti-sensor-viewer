@@ -4,7 +4,7 @@ import sensor_data_api from "../../API/sensor_data";
 import Btn from "../../Btn";
 import { config } from "../../config";
 import { useDispatch, useSelector } from "react-redux";
-import { NODE_MOVE_STOP } from "../../reducer/store";
+import { MOVE_NODE } from "../../reducer/store";
 
 const PopupItem = styled.div`
     z-index: 999;
@@ -34,12 +34,9 @@ const WrapDiv = styled.div`
 const NodeDeletePopup = () => {
     const dispatch = useDispatch();
 
-    const sensor_list = useSelector((state) => {
-        return Object.keys(state.all_sensor_data).length > 0 && state.selected_factory ? Object.keys(state.all_sensor_data[state.selected_factory]) : []       
-    })    
-
-    const visulazation_sensor_list = useSelector((state) => Object.keys(state.sensor_position))
-    const non_visulazation_sensor_list = sensor_list.filter(x => !visulazation_sensor_list.includes(x));        
+    const selected_factory_node_list = useSelector((state) => state.selected_factory_node_list)           
+    const visulazation_sensor_list = useSelector((state) => Object.keys(state.selected_factory_sensor_position))
+    const non_visulazation_sensor_list = selected_factory_node_list.filter(x => !visulazation_sensor_list.includes(x));        
     const selected_factory = useSelector(state => state.selected_factory);
 
     const [is_show, set_is_show] = useState(false);
@@ -61,14 +58,14 @@ const NodeDeletePopup = () => {
         sensor_data_api.post(url, post_data)   
         .then(d => {            
             if (d.status == 200){
-                const node_move_stop_action = {
-                    type: NODE_MOVE_STOP,
+                const MOVE_NODE_action = {
+                    type: MOVE_NODE,
                     data: {
                         item: '',
                         sensor_position: d.data.sensor_position
                     }
                 }
-                dispatch(node_move_stop_action)
+                dispatch(MOVE_NODE_action)
             }
         })                         
     }

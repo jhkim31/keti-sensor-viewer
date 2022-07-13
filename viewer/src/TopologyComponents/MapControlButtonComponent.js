@@ -6,6 +6,7 @@ import NodeAddPopup from "./Button/NodeAddPopup";
 import NodeDeletePopup from "./Button/NodeDeletePopup";
 import RefreshBtn from "./Button/RefreshBtn";
 import EdgesButton from './Button/EdgesButton'
+import { useSelector } from "react-redux";
 
 
 const BtnSpace = styled.div`
@@ -13,15 +14,20 @@ const BtnSpace = styled.div`
 `
 
 const MapControlButtonComponent = () => {            
+    const selected_factory = useSelector(state => state.selected_factory)
     return (
-        <BtnSpace>            
-            <FloorEditPopupComponent/>
-            <NodeAddPopup />                                        
-            <NodeDeletePopup/>
-            <RefreshBtn/>
-            <FixedButton/>
-            <EdgesButton/>
-        </BtnSpace>
+        <>
+            { 
+            selected_factory && <BtnSpace>            
+                <FloorEditPopupComponent/>
+                <NodeAddPopup />                                        
+                <NodeDeletePopup/>
+                <RefreshBtn/>
+                <FixedButton/>
+                <EdgesButton/>
+            </BtnSpace>
+            }
+        </>
     );
 };
 

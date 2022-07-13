@@ -16,7 +16,7 @@ const Hbutton = styled.div`
 
 const InfoComponent = ({set_show_sidebar}) => {
 
-    const update_time = useSelector(state => state.update_time)
+    const last_update_time = useSelector(state => state.last_update_time)
 
     const is_mobile = useMediaQuery({ maxDeviceWidth: 1199 });
     const selected_factory = useSelector(state => state.selected_factory );
@@ -24,11 +24,9 @@ const InfoComponent = ({set_show_sidebar}) => {
     
     function toggle_sidebar() {        
         set_show_sidebar((visible) => {                        
-            if (visible == false){
-                console.log("hidden => visible")
+            if (visible == false){                
                 return true
-            } else{
-                console.log("visible => hidden")
+            } else{                
                 return false
             }
         })

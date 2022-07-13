@@ -22,16 +22,15 @@ const GatewayWrapper = styled.div`
 
 const SensorListComponent = () => {        
     const dispatch = useDispatch();
-    const update_time = useSelector(state => state.update_time);
+    const last_update_time = useSelector(state => state.last_update_time);
     
     const selected_factory_useable_sensor_list = useSelector(state => state.selected_factory_useable_sensor_list)
-    const selected_factory_sensor_data = useSelector(state => state.selected_factory_sensor_data)        
-    const selected_factory_gateway = useSelector(state => state.selected_factory_gateway)
+    const selected_factory_data = useSelector(state => state.selected_factory_data)        
+    const selected_factory_gateway_list = useSelector(state => state.selected_factory_gateway_list)
     const selected_gateway = useSelector(state => state.selected_gateway)  
-    const in_gateway_node = useSelector(state => state.in_gateway_node)
+    const selected_gateway_node_list = useSelector(state => state.selected_gateway_node_list)
     
-    const sensor_id_list = Object.keys(selected_factory_sensor_data)    
-    const selected_factory_gateway_list = Object.keys(selected_factory_gateway)    
+    const node_id_list = Object.keys(selected_factory_data)        
     
     return (
         <div>
@@ -65,10 +64,10 @@ const SensorListComponent = () => {
                     <SensorListHeaderComponent/>                    
                 </thead>
                 <tbody>
-                    {sensor_id_list.map((id, index) => {    
+                    {node_id_list.map((id, index) => {    
                         let mac_addr = ""
                         try {
-                            mac_addr = selected_factory_sensor_data[id].data.node_info[0].id;
+                            mac_addr = selected_factory_data[id].data.node_info[0].id;
                         } catch {
                             console.log("mac주소가 없습니다.");
                         }
@@ -77,13 +76,13 @@ const SensorListComponent = () => {
                         if (selected_gateway === "")
                             show_sensor = true
                         else 
-                            if (in_gateway_node.includes(mac_addr))
+                            if (selected_gateway_node_list.includes(mac_addr))
                                 show_sensor = true
                         return show_sensor && <SensorListRowComponent                            
                                 key={"sensor_row_data_" + index}
                                 sensor_id={id}
                                 row_index={index}                                                         
-                                sensor_data={selected_factory_sensor_data[id].data.sensors}                                                                                                                                                                                   
+                                sensor_data={selected_factory_data[id].data.sensors}                                                                                                                                                                                   
                             />
                     })}
                 </tbody>

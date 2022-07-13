@@ -46,7 +46,7 @@ export const config = {
             "bg" : "white",
             "selected_bg" : "red"
         }
-    },
+    },    
     "mobile_layout" : {
         "row" : "50px 300px 1fr",
         "col" : "1fr",
