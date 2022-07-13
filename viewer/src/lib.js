@@ -1,4 +1,4 @@
-export function get_keys(all_sensor_data){
+export function get_sensor_list_by_factory(all_sensor_data){
     const k = Object.keys(all_sensor_data)
     let all_data = {}
     k.forEach(item => {
@@ -23,7 +23,7 @@ export function get_keys(all_sensor_data){
     return all_data
 }
 
-export function get_gateway(all_sensor_data){
+export function group_by_gateway(all_sensor_data){
     const factory_list = Object.keys(all_sensor_data)
 
     

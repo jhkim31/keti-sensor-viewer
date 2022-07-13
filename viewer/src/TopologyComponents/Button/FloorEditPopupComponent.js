@@ -43,8 +43,7 @@ const FloorEditPopupComponent = () => {
     const [upload_file, set_upload_file] = useState({});
     const base_url = config.base_url;
 
-    const img_url = `${base_url}/get_image?factory=${selected_factory}&floor=0&timestamp=${new Date().getTime()}`
-    console.log("selected_factory : ", selected_factory);    
+    const popup_img_url = `${base_url}/get_image?factory=${selected_factory}&floor=0&timestamp=${new Date().getTime()}`       
     const open = () => { set_is_show(true); };
     const close = () => { set_is_show(false); };    
 
@@ -98,7 +97,7 @@ const FloorEditPopupComponent = () => {
                 <PopupBackground>
                     <PopupItem>
                         <button onClick={() => close()} style={{float:"right"}}>close</button>                        
-                        <MapPreview url_origin={img_url} url_new={ImageSrc}/>                                                                                                                            
+                        <MapPreview url_origin={popup_img_url} url_new={ImageSrc}/>                                                                                                                            
                         <button
                             onClick={() => {                                
                                 post_file();                                                            

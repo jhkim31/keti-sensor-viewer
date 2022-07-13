@@ -7,7 +7,7 @@ import { NODE_FIX_TOGGLE } from "../../reducer/store";
 
 const FixedButton = () => {    
     const dispatch = useDispatch();
-    const node_fixed = useSelector(state => state.node_fixed);
+    const node_fixed = useSelector(state => state.topology.fix_node);
     function click () {
         dispatch({
             type: NODE_FIX_TOGGLE            

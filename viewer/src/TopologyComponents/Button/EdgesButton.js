@@ -6,7 +6,7 @@ import { SHOW_EDGES_TOGGLE } from "../../reducer/store";
 
 const EdgesButton = () => {    
     const dispatch = useDispatch();
-    const show_edges = useSelector(state => state.show_edges);
+    const show_edges = useSelector(state => state.topology.show_edges);
     function click () {
         dispatch({
             type: SHOW_EDGES_TOGGLE            
