@@ -1,0 +1,68 @@
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.shrink-0 {
+  flex-shrink: 0;
+}
+
+.grow {
+  flex-grow: 1;
+}
+
+.h-screen {
+  height: 100vh;
+}
+
+.v-screen {
+  width: 100vw;
+}
+
+.bg-darker {
+  background-color: #202020;
+}
+
+.bg-dark {
+  background-color: #2D3032;
+}
+
+.font-mono {
+  font-family: monospace;
+}
+
+.color-white {
+  color: white;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.contents {
+  display: grid;
+  place-items: center;
+  transition: filter 0.2s ease-out, background-color 0.2s ease-out;
+  font-size: 16px;
+}
+
+.sample-drag-bar {
+  flex-shrink: 0;
+  width: 5px;
+  background-color: #d1d5db;
+  cursor: col-resize;
+  transition: background-color 0.15s 0.15s ease-in-out;
+}
+
+.sample-drag-bar.sample-drag-bar--horizontal {
+  height: 5px;
+  width: 100%;
+  cursor: row-resize;
+}
