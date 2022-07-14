@@ -32,11 +32,11 @@ const WrapDiv = styled.div`
 `
 
 const NodeAddPopup = () => {    
-    const dispatch = useDispatch();
-
+    const dispatch = useDispatch();    
     const selected_factory_node_list = useSelector((state) => state.selected_factory_node_list)           
     const visulazation_sensor_list = useSelector((state) => Object.keys(state.selected_factory_sensor_position))
-    const non_visulazation_sensor_list = selected_factory_node_list.filter(x => !visulazation_sensor_list.includes(x));        
+    const non_visulazation_sensor_list = selected_factory_node_list.filter(x => !visulazation_sensor_list.includes(x)); 
+    console.debug(non_visulazation_sensor_list)       
     const selected_factory = useSelector(state => state.selected_factory);
 
     const [is_show, set_is_show] = useState(false);

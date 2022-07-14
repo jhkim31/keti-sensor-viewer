@@ -38,8 +38,7 @@ const SensorListRowComponent = ({
             start_time = new Date(end_time - 3600000)
             start_date_str = `${start_time.getYear() + 1900}/${start_time.getMonth() + 1}/${start_time.getDate()}-${start_time.getHours()}:${start_time.getMinutes()}:${start_time.getSeconds()}`
             end_date_str = `${end_time.getYear() + 1900}/${end_time.getMonth() + 1}/${end_time.getDate()}-${end_time.getHours()}:${end_time.getMinutes()}:${end_time.getSeconds()}`
-            
-            console.log(row_index, end_time)
+                    
             let h = 0, m = 0, s = 0;
             s = Math.round((new Date() - end_time.getTime()) / 1000);
             h = Math.round(s / 3600);
