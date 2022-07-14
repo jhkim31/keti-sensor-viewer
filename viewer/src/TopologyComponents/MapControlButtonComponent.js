@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 
 
 const BtnSpace = styled.div`
-    height: 40px;
+    height: 40px;    
 `
 
 const MapControlButtonComponent = () => {            

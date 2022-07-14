@@ -13,13 +13,10 @@ const MapComponent = () => {
     const selected_factory_data = useSelector(state => state.selected_factory_data)    
     const node_id_list = Object.keys(selected_factory_data)
     const selected_gateway_node_list = useSelector(state => state.selected_gateway_node_list)
-    const selected_factory_sensor_position = useSelector(state => state.selected_factory_sensor_position)    
-    
+    const selected_factory_sensor_position = useSelector(state => state.selected_factory_sensor_position)        
     const last_timestamp = useSelector(state => state.last_timestamp);
-    const network_graph = useRef(null);
-    
+    const network_graph = useRef(null);    
     const base_url = config.base_url;
-
     const selected_factory_image_width = useSelector(state => state.topology.image_width)
     const selected_factory_image_height = useSelector(state => state.topology.image_height)
     const fix_node = useSelector(state => state.topology.fix_node)
