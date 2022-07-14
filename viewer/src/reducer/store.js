@@ -9,7 +9,6 @@ const SET_INIT_STATE = 'SET_INIT_STATE'
 const DOWN_STAIR = "DOWN_STAIR"
 const UP_STAIR = "UP_STAIR"
 const MOVE_NODE = "MOVE_NODE"
-const RE_RENDER = "RE_RENDER"
 const UPDATE_IMAGE_SIZE = "UPDATE_IMAGE_SIZE"
 const NODE_FIX_TOGGLE = "NODE_FIX_TOGGLE"
 const SHOW_EDGES_TOGGLE = "SHOW_EDGES_TOGGLE"
@@ -51,12 +50,17 @@ function reducer(current_state = init_state, action) {
         selected_gateway_node_list: [],
 
         last_update_time: new Date().toString(),
-        last_timestamp: new Date().getTime()
+        last_timestamp: new Date().getTime(),
+        topology: {
+          ...current_state.topology,
+          signal: false
+        }
       }
       console.info("ACTION: UPDATE_DATA", new_state)
       break;
 
-    case SELECT_FACTORY:      
+    case SELECT_FACTORY:    
+    console.debug(current_state.node_list_by_factory)
       new_state = {
         ...current_state,
         selected_factory: action.data.factory_info.factory,              
@@ -74,7 +78,7 @@ function reducer(current_state = init_state, action) {
           ...current_state.topology,
           image_width: action.data.factory_info.width,
           image_height: action.data.factory_info.height,
-        
+          signal: false,
         },                
       }      
       console.info("ACTION: SELECT_FACTORY", new_state)
@@ -110,18 +114,14 @@ function reducer(current_state = init_state, action) {
         break;
       
     case MOVE_NODE:
+      console.debug(action.data)
       new_state = {
         ...current_state,
         selected_node: action.data.item,
-        sensor_position: action.data.sensor_position
+        selected_factory_sensor_position: action.data.sensor_position,        
+        last_update_time: new Date().toString()
       }
-      break;
-    
-    case RE_RENDER:      
-      new_state = {
-        ...current_state,
-        last_update_time: action.data.last_update_time
-      }
+      console.info("ACTION: MOVE_NODE", new_state)
       break;
     
     case UPDATE_IMAGE_SIZE:
@@ -189,11 +189,12 @@ export {
   UP_STAIR,
   DOWN_STAIR,
   SELECT_GATEWAY,
-  MOVE_NODE,
-  RE_RENDER,
+  MOVE_NODE,  
   UPDATE_IMAGE_SIZE,
   NODE_FIX_TOGGLE,
   SHOW_EDGES_TOGGLE,
   TRUE_SIGNAL,
-  FALSE_SIGNAL
+  FALSE_SIGNAL,
+  UPDATE_DATA
 }
+

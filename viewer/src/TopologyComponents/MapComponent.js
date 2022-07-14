@@ -8,13 +8,11 @@ import sensor_data_api from "../API/sensor_data";
 const MapComponent = () => {    
     const dispatch = useDispatch();
     const selected_factory = useSelector(state => state.selected_factory)
-    const selected_node = useSelector(state => state.selected_node)
-    const selected_gateway = useSelector(state => state.selected_gateway)
+    const selected_node = useSelector(state => state.selected_node)    
 
     const selected_factory_data = useSelector(state => state.selected_factory_data)    
     const node_id_list = Object.keys(selected_factory_data)
     const selected_gateway_node_list = useSelector(state => state.selected_gateway_node_list)
-
     const selected_factory_sensor_position = useSelector(state => state.selected_factory_sensor_position)    
     
     const last_timestamp = useSelector(state => state.last_timestamp);
@@ -35,7 +33,7 @@ const MapComponent = () => {
     let image = new Image();    
     image.onload = () => {        
         dispatch({type: TRUE_SIGNAL})
-    }
+    }    
     image.src = `${base_url}/get_image?factory=${selected_factory}&floor=0&last_timestamp=${last_timestamp}`;    
 
     
@@ -54,6 +52,7 @@ const MapComponent = () => {
         x : 0,
         y : 0,        
     })
+
     const options = {
         autoResize: true,
         
@@ -68,6 +67,7 @@ const MapComponent = () => {
             }
         },
         edges: {
+            hidden: !show_edges,
             arrows: {
                 to: true,
                 from: false
@@ -82,21 +82,18 @@ const MapComponent = () => {
             minVelocity: 0.01
         }
     }
-
-      
-
     
     node_id_list.forEach((node) => {    
-         
+        let show_node = false;
         let mode = "";
         let mac_addr = ""
         let next_hop = ""
         try {
-            next_hop = selected_factory_data?.[node].data.node_info[1].info.next_hop.toUpperCase().slice(-5) ?? '';
+            next_hop = selected_factory_data[node].data.node_info[1].info.next_hop.toUpperCase().slice(-5);
             mac_addr = selected_factory_data[node].data.node_info[0].id.toUpperCase()
-            const id = mac_addr.slice(-5)
             mode = selected_factory_data[node].data.node_info[1].info.mode;
-
+            const id = mac_addr.slice(-5)
+            
             let color = "gray"                        
             if (mode == "gateway"){
                 color = "red"
@@ -115,58 +112,31 @@ const MapComponent = () => {
                 y = -(image_height / 2) + selected_factory_sensor_position[node].y * image_height
             }
             if (selected_gateway_node_list.length > 0){                      
-                if (selected_gateway_node_list.includes(mac_addr)){
-                    nodes.push({
-                        id: id,
-                        label: id,
-                        color: color,
-                        x : x,
-                        y : y,                        
-                    })
-                    if (show_edges){
-                        if (id !== next_hop)
-                        edges.push({
-                            from: id,
-                            to: next_hop
-                        })
-                    else
-                        edges.push({
-                            from: id,
-                            to: "master"
-                        })
-                    }                                                        
-                }
+                if (selected_gateway_node_list.includes(mac_addr))
+                    show_node = true                                                     
             } else {
+                show_node = true
+            }       
+            console.log(show_node)    
+            if (show_node){
                 nodes.push({
                     id: id,
                     label: id,
                     color: color,
                     x : x,
                     y : y,                    
-                })
-                if (show_edges){
-                    if (id !== next_hop)
-                    edges.push({
-                        from: id,
-                        to: next_hop
-                    })
-                else
-                    edges.push({
-                        from: id,
-                        to: "master"
-                    })
-                } 
-            }           
-        } catch (e) {
-            console.log(e)
+                })                                
+                edges.push({
+                    from: id,
+                    to: (id === next_hop && mode == "gateway") ? "master" : next_hop
+                })                             
+            }
+        } catch (e) {            
         }
     })
 
-    const events = {
-        select: function (event) {            
-            var { nodes, edges } = event;            
-        },        
-        click: function(event){
+    const events = {        
+        doubleClick: function(event){
             if (event.nodes.length > 0){
                 const node = event.nodes[0];
                 dispatch({
@@ -178,24 +148,21 @@ const MapComponent = () => {
             }            
         },
         beforeDrawing: function () {            
-            let canvas = undefined;
-            if (network_graph.current != null)
-            
-                canvas = network_graph.current.container.current.childNodes[0].childNodes[0];
-            if (canvas != undefined) {                
-                const ctx = canvas.getContext('2d')                   
-                try{                                             
-                    if(image.naturalWidth > 0)                                                                                            
-                        ctx.drawImage(image, -((selected_factory_image_width * resize_rate) / 2), -((selected_factory_image_height * resize_rate) / 2),selected_factory_image_width * resize_rate, selected_factory_image_height * resize_rate)                                    
+            let canvas = undefined;            
+            if (network_graph.current != null)            
+                canvas = network_graph.current.container.current.childNodes[0].childNodes[0];            
+            if (canvas != undefined) {
+                const ctx = canvas.getContext('2d')
+                try{                                                      
+                    ctx.drawImage(image, -((selected_factory_image_width * resize_rate) / 2), -((selected_factory_image_height * resize_rate) / 2),selected_factory_image_width * resize_rate, selected_factory_image_height * resize_rate)                                                        
                 } catch(e){                                        
                     console.log(e)
                 }
             }
         },        
         dragEnd: function(event) {            
-            if (event.nodes.length > 0){
-                const node = event.nodes[0];                
-                // image.src = `${base_url}/get_image?factory=${selected_factory}&floor=0&last_timestamp=${last_timestamp}`
+            if (event.nodes.length > 0 && fix_node){
+                const node = event.nodes[0];                                
                 const url = '/sensor-position';
                 const post_data = {
                     factory: selected_factory,
@@ -219,7 +186,10 @@ const MapComponent = () => {
     return (
         <>
             {
-                (Object.keys(selected_factory_data).length > 0) && signal && <Graph
+                (
+                Object.keys(selected_factory_data).length > 0) && (signal || image.naturalWidth == 0) && 
+
+                <Graph
                     ref={network_graph}
                     graph={graph}
                     options={options}
