@@ -14,9 +14,11 @@ const TableContainer = styled.div`
 `
 
 const SensorListTable = styled.table`
+
     width:100%;
 `
 const GatewayWrapper = styled.div`
+    ${(props) => "width:" + props.size + 'px;'}        
     background:${config.layout.theme_color};    
 `
 
@@ -34,7 +36,9 @@ const SensorListComponent = () => {
     
     return (
         <div>
-        <GatewayWrapper>
+        <GatewayWrapper
+            size={(selected_factory_gateway_list.length + 1) * 150}
+        >
             {            
                 selected_factory_gateway_list.map((gateway) => {      
                     const select_gateway_action = {
@@ -48,8 +52,11 @@ const SensorListComponent = () => {
                         button_color = "red"                        
                     return (
                         <Btn key={gateway} 
-                        value={(/^[A-Z0-9]{2}(:[A-Z0-9]{2}){5}$/).test(gateway) ? gateway : "error"} bg_color={button_color}
-                            onClick={() => dispatch(select_gateway_action)}
+                        value={(/^[A-F0-9]{2}(:[A-F0-9]{2}){5}$/).test(gateway) ? gateway : "error"} bg_color={button_color}
+                            onClick={() => {
+                                if ((/^[A-F0-9]{2}(:[A-F0-9]{2}){5}$/).test(gateway))
+                                    dispatch(select_gateway_action)
+                            }}
                         />                    
                     )                                                    
                 })            
