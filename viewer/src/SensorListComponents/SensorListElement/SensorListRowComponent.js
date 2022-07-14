@@ -19,8 +19,8 @@ const SensorListRowComponent = ({
         sensor_id,
         sensor_data,
         row_index,
-    }) => {         
-        const dispatch = useDispatch();       
+    }) => {
+        const dispatch = useDispatch();
         const selected_factory = useSelector(state => state.selected_factory);
         const selected_node = useSelector(state => state.selected_node);
         const selected_factory_useable_sensor_list = useSelector(state => state.selected_factory_useable_sensor_list)
@@ -33,24 +33,24 @@ const SensorListRowComponent = ({
         let end_date_str = ''
         let mode = ""
         let last_data_time_str = ''
-        try{                     
+        try{
             end_time = new Date(selected_factory_data[sensor_id].service.timestamp * 1000)
             start_time = new Date(end_time - 3600000)
             start_date_str = `${start_time.getYear() + 1900}/${start_time.getMonth() + 1}/${start_time.getDate()}-${start_time.getHours()}:${start_time.getMinutes()}:${start_time.getSeconds()}`
             end_date_str = `${end_time.getYear() + 1900}/${end_time.getMonth() + 1}/${end_time.getDate()}-${end_time.getHours()}:${end_time.getMinutes()}:${end_time.getSeconds()}`
-                    
+
             let h = 0, m = 0, s = 0;
             s = Math.round((new Date() - end_time.getTime()) / 1000);
             h = Math.round(s / 3600);
             s %= 3600;
             m = Math.round(s / 60);
             s %= 60
-            
+
             if (h > 0)
                 last_data_time_str = `${h}시간`
             else if (m > 0)
                 last_data_time_str = `${m}분`
-            else 
+            else
             last_data_time_str = `${s}초`
             mode = selected_factory_data[sensor_id].data.node_info[1].info.mode;
         } catch{
@@ -61,7 +61,7 @@ const SensorListRowComponent = ({
             data: {
                 selected_node: sensor_id
             }
-        }                        
+        }
         const tsdb_url = `http://io.energyiotlab.com:54242/#start=${start_date_str}&end=${end_date_str}&m=sum:${selected_factory}%7Bmac=${sensor_id},sensor=*%7D&o=&key=out%20center%20top%20horiz&wxh=1024x768&style=linespoint`
     return (
         <SelectSensorRow
@@ -69,10 +69,10 @@ const SensorListRowComponent = ({
             sensor_id={sensor_id}
             selected_node={selected_node}
         >
-            <TableCell><b>{mode}</b></TableCell>
-            <TableCell>                
-                <a href={tsdb_url} target='_blank'>{sensor_id}</a>                                    
+            <TableCell style={{position: "sticky", left: 0, background:"gray", textAlign:"center",  }}>
+                <a href={tsdb_url} target='_blank'>{sensor_id}</a>
             </TableCell>
+            <TableCell><b>{mode}</b></TableCell>
             <TableCell>
                 {last_data_time_str}
             </TableCell>
@@ -85,7 +85,7 @@ const SensorListRowComponent = ({
                             value = value.toFixed(5);
                         }
                     }
-                } catch {}                                   
+                } catch {}
                 return <TableCell key={row_index + "_" + item}>{value}</TableCell>
             })}
         </SelectSensorRow>

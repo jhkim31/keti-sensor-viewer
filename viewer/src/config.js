@@ -1,9 +1,9 @@
 export const config = {
     // "base_url" : "http://172.20.10.14:5000/"    ,
     "base_url" : "http://192.168.101.237:5000",
-    // "base_url" : "http://localhost:5000", 
+    // "base_url" : "http://localhost:5000",
     "layout" : {
-        "row" : "80px 400px 1fr",
+        "row" : "90px 400px 1fr",
         "col" : "200px 1fr",
         "topology_component_height" : 360,
         "border" : "1px solid black",
@@ -29,8 +29,8 @@ export const config = {
         "sensor_node" : {
             "cursor": "pointer",
             "color": "black",
-            "sensor_color_change_time" : [5, 10, 60, 160, 1440],
-            "node_color" : ["blue", "green", "yellow", "orange", "gray", "black"],
+            "sensor_color_change_time" : [3, 60, 1440],
+            "node_color" : ["#0b03ff", "#006b2e", "#30523f", "#003747"],
             "border" : "1px solid black",
             "gateway_node_border" : "3px solid red",
             "selected_node_color" : "red",
@@ -47,11 +47,11 @@ export const config = {
             "bg" : "white",
             "selected_bg" : "red"
         }
-    },    
+    },
     "mobile_layout" : {
         "row" : "50px 300px 1fr",
         "col" : "1fr",
-        "topology_component_height" : 260,        
+        "topology_component_height" : 260,
     }
 
 }

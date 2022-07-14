@@ -13,7 +13,7 @@ const PopupItem = styled.div`
     left:25%;
     top:20%;
     width:50%;
-    height:30%;    
+    height:30%;
     overflow:scroll;
 `
 
@@ -24,34 +24,34 @@ const PopupBackground = styled.div`
     top:0;
     width:100%;
     height:100%;
-    background:rgba(0,0,0,${config.layout.popup.bg_alpha}); 
+    background:rgba(0,0,0,${config.layout.popup.bg_alpha});
 `
 
 const WrapDiv = styled.div`
     display:inline-block;
 `
 
-const NodeAddPopup = () => {    
-    const dispatch = useDispatch();    
-    const selected_factory_node_list = useSelector((state) => state.selected_factory_node_list)           
-    const visulazation_sensor_list = useSelector((state) => Object.keys(state.selected_factory_sensor_position))
-    const non_visulazation_sensor_list = selected_factory_node_list.filter(x => !visulazation_sensor_list.includes(x)); 
-    console.debug(non_visulazation_sensor_list)       
+const NodeAddPopup = () => {
+    const dispatch = useDispatch();
+    const selected_factory_node_list = useSelector((state) => state.selected_factory_node_list)
+    const visulazation_sensor_list = useSelector((state) => Object.keys(state.selected_factory_node_position))
+    const non_visulazation_sensor_list = selected_factory_node_list.filter(x => !visulazation_sensor_list.includes(x));
+
     const selected_factory = useSelector(state => state.selected_factory);
 
     const [is_show, set_is_show] = useState(false);
     const open = () => { set_is_show(true); };
     const close = () => { set_is_show(false); };
 
-    const add_node = (sensor_id) => {        
+    const add_node = (sensor_id) => {
         const post_data = {
             factory: selected_factory,
-            sensor_id: sensor_id,            
+            sensor_id: sensor_id,
         };
 
-        const url = "/add_node_position";                
-        sensor_data_api.post(url, post_data)                  
-        .then(d => {                
+        const url = "/add_node_position";
+        sensor_data_api.post(url, post_data)
+        .then(d => {
             if (d.status == 200){
                 const MOVE_NODE_action = {
                     type: MOVE_NODE,
@@ -61,43 +61,43 @@ const NodeAddPopup = () => {
                     }
                 }
                 dispatch(MOVE_NODE_action)
-            }                    
-        })      
-        .catch(e => console.log(e))  
+            }
+        })
+        .catch(e => console.log(e))
     }
     return (
         <WrapDiv>
             <Btn value={"노드 추가"} onClick={() => open()} />
-            {           
-                is_show && 
-                <PopupBackground>                    
-                    <PopupItem>  
+            {
+                is_show &&
+                <PopupBackground>
+                    <PopupItem>
                         <button
-                            onClick={() => close()}                                                            
-                            style={{   
+                            onClick={() => close()}
+                            style={{
                                 position:"sticky",
-                                top: "0",                        
-                                float:"right",                              
-                                
+                                top: "0",
+                                float:"right",
+
                             }}
-                        >close</button>                      
-                        {                        
+                        >close</button>
+                        {
                             non_visulazation_sensor_list.map(item => {
                                 return(
-                                    <div 
-                                    key={item}                                    
-                                    onClick={() => {                                    
+                                    <div
+                                    key={item}
+                                    onClick={() => {
                                         add_node(item)
                                         close()
                                     }}
                                     >{item}</div>
                                 )
                             })
-                        }                                                                                                                                                              
-                    </PopupItem>                         
-                </PopupBackground>           
+                        }
+                    </PopupItem>
+                </PopupBackground>
             }
-        </WrapDiv>    
+        </WrapDiv>
     )
 };
 

@@ -3,7 +3,6 @@ export function get_sensor_list_by_factory(all_sensor_data){
     let all_data = {}
     k.forEach(item => {
         let json_data = all_sensor_data[item]
-
         let keys_list = []
         const keys = Object.keys(json_data)
         try{
@@ -31,9 +30,9 @@ export function get_sensor_list_by_factory(all_sensor_data){
 // }
 
 export function group_by_gateway(all_factory_data){
-    const factory_list = Object.keys(all_factory_data)
+    const factories = Object.keys(all_factory_data)
     var return_obj = {}
-    factory_list.forEach(factory => {
+    factories.forEach(factory => {
         const nodes = all_factory_data[factory];
         let node_trees = [];
         let gateways = []
@@ -88,7 +87,6 @@ export function group_by_gateway(all_factory_data){
             } catch{}
 
         })
-        console.log(factory, gateways, node_trees)
 
         try{
             return_obj[factory] = {}
@@ -103,7 +101,6 @@ export function group_by_gateway(all_factory_data){
             }
         } catch{}
     })
-    console.log(return_obj)
     return return_obj;
 }
 
@@ -141,15 +138,19 @@ function dfs_input(root_node, node, next_hop){
         root_node.child.push(node)
         return true;
     }
+    let pushed = false;
     for(let i = 0; i < root_node.child.length; i++){
         const child_node = root_node.child[i]
         if (child_node.mac === next_hop){
             child_node.child.push(node)
-            return true;
+            pushed = true;
+            break;
         } else {
-            return dfs_input(child_node, node, next_hop)
+            pushed = dfs_input(child_node, node, next_hop)
+            if (pushed)
+                break;
         }
     }
-    return false;
+    return pushed;
 }
 

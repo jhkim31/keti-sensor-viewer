@@ -23,33 +23,33 @@ const SidebarItemLi = styled.li`
     font-weight:${config.layout.sidebar.item.font_weight};
 `
 
-const SidebarItem = ({         
-    factory_name,    
+const SidebarItem = ({
+    factory_name,
     set_show_sidebar
 }) => {
     const dispatch = useDispatch()
     const is_mobile = useMediaQuery({ maxDeviceWidth: 1199 })
     const selected_factory = useSelector((state) => state.selected_factory)
     return (
-        <SidebarItemLi            
+        <SidebarItemLi
             selected_factory={selected_factory}
             factory_name={factory_name}
             onClick={() => {
                 if (is_mobile)
-                    set_show_sidebar(false);                           
-                const url = `/get-factory-data?factory=${factory_name}`;        
-                sensor_data_api.get(url)        
-                .then(d => {                    
-                    if (d.status == 200){                        
+                    set_show_sidebar(false);
+                const url = `/get-factory-data?factory=${factory_name}`;
+                sensor_data_api.get(url)
+                .then(d => {
+                    if (d.status == 200){
                         dispatch({
                             type: SELECT_FACTORY,
                             data: d.data
-                        })                                                 
-                    }                    
+                        })
+                    }
                 })
                 .catch(e => {
                     console.log(e)
-                })                
+                })
             }}
         >
             {factory_name}

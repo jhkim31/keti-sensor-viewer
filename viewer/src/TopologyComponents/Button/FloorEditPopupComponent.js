@@ -13,7 +13,7 @@ const PopupItem = styled.div`
     left:25%;
     top:20%;
     width:50%;
-    height:30%;    
+    height:30%;
 `
 
 const PopupBackground = styled.div`
@@ -30,22 +30,23 @@ const WrapDiv = styled.div`
     display:inline-block;
 `
 
-const MapPreview = styled.div`    
+const MapPreview = styled.div`
     width:80%;
     height:80%;
-    background: no-repeat center/80% url(${props => props.url_new == '' ? props.url_origin : props.url_new });  
+    background: no-repeat center/80% url(${props => props.url_new == '' ? props.url_origin : props.url_new });
 `
 const FloorEditPopupComponent = () => {
     const dispatch = useDispatch();
     const selected_factory = useSelector(state => state.selected_factory);
+    const floor = useSelector(state => state.topology.floor);
     const [is_show, set_is_show] = useState(false);
-    const [ImageSrc, setImageSrc] = useState('');    
+    const [ImageSrc, setImageSrc] = useState('');
     const [upload_file, set_upload_file] = useState({});
     const base_url = config.base_url;
 
-    const popup_img_url = `${base_url}/get_image?factory=${selected_factory}&floor=0&timestamp=${new Date().getTime()}`       
+    const popup_img_url = `${base_url}/get_image?factory=${selected_factory}&floor=${floor}&timestamp=${new Date().getTime()}`
     const open = () => { set_is_show(true); };
-    const close = () => { set_is_show(false); };    
+    const close = () => { set_is_show(false); };
 
     const encodeFileToBase64 = (fileBlob) => {
         const reader = new FileReader();
@@ -65,14 +66,14 @@ const FloorEditPopupComponent = () => {
         formData.append(
             'file',
             upload_file,
-            `${selected_factory},${0}`
+            `${selected_factory},${floor}`
         );
         const config = {
             headers: {
                 "content-type": "multipart/form-data"
             }
         };
-        sensor_data_api.post(url, formData, config)      
+        sensor_data_api.post(url, formData, config)
         .then(d => {
             if (d.status == 200){
                 setImageSrc('');
@@ -80,36 +81,36 @@ const FloorEditPopupComponent = () => {
                     type: UPDATE_IMAGE_SIZE,
                     data: {
                         width : d.data.width,
-                        height : d.data.height,                                                
+                        height : d.data.height,
                     }
                 });
-                dispatch({type: FALSE_SIGNAL})                
+                dispatch({type: FALSE_SIGNAL})
             }
-            close();    
-        })  
+            close();
+        })
     }
-    
+
     return (
         <WrapDiv>
-            <Btn value={"Map Edit"} onClick={() => open()} />                                   
-            {           
-                is_show && 
+            <Btn value={"Map Edit"} onClick={() => open()} />
+            {
+                is_show &&
                 <PopupBackground>
                     <PopupItem>
-                        <button onClick={() => close()} style={{float:"right"}}>close</button>                        
-                        <MapPreview url_origin={popup_img_url} url_new={ImageSrc}/>                                                                                                                            
+                        <button onClick={() => close()} style={{float:"right"}}>close</button>
+                        <MapPreview url_origin={popup_img_url} url_new={ImageSrc}/>
                         <button
-                            onClick={() => {                                
-                                post_file();                                                            
+                            onClick={() => {
+                                post_file();
                             }}
                             style={{
                                 float:"right",
                             }}
                         >
                             save
-                        </button>   
+                        </button>
 
-                        <input 
+                        <input
                             type="file"
                             onChange={(e) => {
                                 set_upload_file(e.target.files[0]);
@@ -118,11 +119,11 @@ const FloorEditPopupComponent = () => {
                             style={{
                                 float:"right",
                             }}
-                        />                                                  
-                    </PopupItem>     
-                </PopupBackground>           
+                        />
+                    </PopupItem>
+                </PopupBackground>
             }
-        </WrapDiv>    
+        </WrapDiv>
     )
 };
 

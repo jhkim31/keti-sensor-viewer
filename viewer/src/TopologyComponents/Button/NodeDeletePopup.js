@@ -13,7 +13,7 @@ const PopupItem = styled.div`
     left:25%;
     top:20%;
     width:50%;
-    height:30%;    
+    height:30%;
     overflow:scroll;
 `
 
@@ -34,9 +34,9 @@ const WrapDiv = styled.div`
 const NodeDeletePopup = () => {
     const dispatch = useDispatch();
 
-    const selected_factory_node_list = useSelector((state) => state.selected_factory_node_list)           
-    const visulazation_sensor_list = useSelector((state) => Object.keys(state.selected_factory_sensor_position))
-    const non_visulazation_sensor_list = selected_factory_node_list.filter(x => !visulazation_sensor_list.includes(x));        
+    const selected_factory_node_list = useSelector((state) => state.selected_factory_node_list)
+    const visulazation_sensor_list = useSelector((state) => Object.keys(state.selected_factory_node_position))
+    const non_visulazation_sensor_list = selected_factory_node_list.filter(x => !visulazation_sensor_list.includes(x));
     const selected_factory = useSelector(state => state.selected_factory);
 
     const [is_show, set_is_show] = useState(false);
@@ -49,14 +49,14 @@ const NodeDeletePopup = () => {
         set_is_show(false);
     };
 
-    const delete_node_post = (sensor_id) => {        
+    const delete_node_post = (sensor_id) => {
         const post_data = {
             factory: selected_factory,
-            sensor_id: sensor_id,            
+            sensor_id: sensor_id,
         };
-        const url = "/delete_node_position";                
-        sensor_data_api.post(url, post_data)   
-        .then(d => {            
+        const url = "/delete_node_position";
+        sensor_data_api.post(url, post_data)
+        .then(d => {
             if (d.status == 200){
                 const MOVE_NODE_action = {
                     type: MOVE_NODE,
@@ -67,39 +67,39 @@ const NodeDeletePopup = () => {
                 }
                 dispatch(MOVE_NODE_action)
             }
-        })                         
+        })
     }
     return (
         <WrapDiv>
             <Btn value={"노드 삭제"} onClick={() => open()} />
-            {           
-                is_show && 
+            {
+                is_show &&
                 <PopupBackground>
-                    <PopupItem>                        
+                    <PopupItem>
                     <button
                             onClick={() => close()}
-                            style={{        
+                            style={{
                                 position:"sticky",
-                                top: "0",                        
-                                float:"right",                                
+                                top: "0",
+                                float:"right",
                             }}
-                        >close</button> 
+                        >close</button>
                         {visulazation_sensor_list.map(item => {
                             return(
                                 <div
                                 key={item}
-                                onClick={() => {                                    
+                                onClick={() => {
                                     delete_node_post(item)
                                     close()
                                 }}
                                 >{item}</div>
                             )
                         })
-                        }                                                                                                                                     
-                    </PopupItem>     
-                </PopupBackground>           
+                        }
+                    </PopupItem>
+                </PopupBackground>
             }
-        </WrapDiv>    
+        </WrapDiv>
     )
 };
 
