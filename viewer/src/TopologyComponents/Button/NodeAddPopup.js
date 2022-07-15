@@ -37,7 +37,6 @@ const NodeAddPopup = () => {
     const visulazation_sensor_list = useSelector((state) => Object.keys(state.selected_factory_node_position))
     const floor =  useSelector(state => state.topology.floor)
     const non_visulazation_sensor_list = selected_factory_node_list.filter(x => !visulazation_sensor_list.includes(x));
-
     const selected_factory = useSelector(state => state.selected_factory);
 
     const [is_show, set_is_show] = useState(false);
@@ -54,16 +53,14 @@ const NodeAddPopup = () => {
         const url = "/add_node_position";
         sensor_data_api.post(url, post_data)
         .then(d => {
-            if (d.status == 200){
-                const MOVE_NODE_action = {
+            if (d.status == 200)
+                dispatch({
                     type: MOVE_NODE,
                     data: {
                         item: sensor_id,
                         sensor_position: d.data.sensor_position
                     }
-                }
-                dispatch(MOVE_NODE_action)
-            }
+                })
         })
         .catch(e => console.log(e))
     }
@@ -74,28 +71,19 @@ const NodeAddPopup = () => {
                 is_show &&
                 <PopupBackground>
                     <PopupItem>
-                        <button
-                            onClick={() => close()}
-                            style={{
-                                position:"sticky",
-                                top: "0",
-                                float:"right",
-
-                            }}
-                        >close</button>
-                        {
-                            non_visulazation_sensor_list.map(item => {
-                                return(
-                                    <div
-                                    key={item}
+                        <button onClick={close} style={{position:"sticky", top: "0", float:"right", }}>
+                            close
+                        </button>
+                        {non_visulazation_sensor_list.map(item => {
+                            return (
+                                <div key={item}
                                     onClick={() => {
                                         add_node(item)
                                         close()
                                     }}
-                                    >{item}</div>
-                                )
-                            })
-                        }
+                                >{item}</div>
+                            )
+                        })}
                     </PopupItem>
                 </PopupBackground>
             }

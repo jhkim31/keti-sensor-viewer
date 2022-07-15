@@ -41,7 +41,7 @@ const SidebarItem = ({
                 const url = `/get-factory-data?factory=${factory_name}&floor=${floor}`;
                 sensor_data_api.get(url)
                 .then(d => {
-                    console.log(d.data)
+                    console.log(`factory: ${factory_name} 선택`)
                     if (d.status == 200){
                         dispatch({
                             type: SELECT_FACTORY,

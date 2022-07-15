@@ -22,12 +22,7 @@ const DeleteFloor = () => {
             })
         })
     }
-    return (
-        <Btn
-            onClick={click}
-            value="맨 위층 삭제"
-        />
-    )
+    return <Btn onClick={click} value="맨 위층 삭제"/>
 };
 
 export default DeleteFloor;

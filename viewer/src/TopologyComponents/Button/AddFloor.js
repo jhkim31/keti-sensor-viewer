@@ -22,12 +22,7 @@ const AddFloor = () => {
             })
         })
     }
-    return (
-        <Btn
-            onClick={click}
-            value="층 추가"
-        />
-    )
+    return <Btn onClick={click} value="층 추가" />
 };
 
 export default AddFloor;

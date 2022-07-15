@@ -13,13 +13,7 @@ const FixedButton = () => {
             type: NODE_FIX_TOGGLE
         })
     }
-    return (
-        <Btn
-            bg_color={node_fixed ? "red" : undefined}
-            onClick={click}
-            value="노드 고정"
-        />
-    )
+    return <Btn bg_color={node_fixed ? "red" : undefined} onClick={click} value="노드 고정" />
 };
 
 export default FixedButton;

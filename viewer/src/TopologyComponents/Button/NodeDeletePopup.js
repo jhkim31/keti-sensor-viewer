@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import sensor_data_api from "../../API/sensor_data";
 import Btn from "../../Btn";
@@ -38,18 +38,13 @@ const NodeDeletePopup = () => {
     const visulazation_sensor_list = useSelector((state) => Object.keys(state.selected_factory_node_position))
     const selected_factory = useSelector(state => state.selected_factory);
     const floor = useSelector(state => state.topology.floor)
-    debugger;
-    const current_floor_nodes = visulazation_sensor_list.filter(node => selected_factory_node_position[node].floor ===floor)
+    const current_floor_nodes = visulazation_sensor_list.filter(node => selected_factory_node_position[node].floor === floor)
 
     const [is_show, set_is_show] = useState(false);
 
-    const open = () => {
-        set_is_show(true);
-    };
+    const open = () => { set_is_show(true); };
 
-    const close = () => {
-        set_is_show(false);
-    };
+    const close = () => { set_is_show(false); };
 
     const delete_node_post = (sensor_id) => {
         const post_data = {
@@ -58,18 +53,16 @@ const NodeDeletePopup = () => {
         };
         const url = "/delete_node_position";
         sensor_data_api.post(url, post_data)
-        .then(d => {
-            if (d.status == 200){
-                const MOVE_NODE_action = {
-                    type: MOVE_NODE,
-                    data: {
-                        item: '',
-                        sensor_position: d.data.sensor_position
-                    }
-                }
-                dispatch(MOVE_NODE_action)
-            }
-        })
+            .then(d => {
+                if (d.status == 200)
+                    dispatch({
+                        type: MOVE_NODE,
+                        data: {
+                            item: '',
+                            sensor_position: d.data.sensor_position
+                        }
+                    })
+            })
     }
     return (
         <WrapDiv>
@@ -78,26 +71,21 @@ const NodeDeletePopup = () => {
                 is_show &&
                 <PopupBackground>
                     <PopupItem>
-                    <button
+                        <button
                             onClick={() => close()}
-                            style={{
-                                position:"sticky",
-                                top: "0",
-                                float:"right",
-                            }}
+                            style={{ position: "sticky", top: "0", float: "right"}}
                         >close</button>
                         {current_floor_nodes.map(item => {
-                            return(
+                            return (
                                 <div
-                                key={item}
-                                onClick={() => {
-                                    delete_node_post(item)
-                                    close()
-                                }}
+                                    key={item}
+                                    onClick={() => {
+                                        delete_node_post(item)
+                                        close()
+                                    }}
                                 >{item}</div>
                             )
-                        })
-                        }
+                        })}
                     </PopupItem>
                 </PopupBackground>
             }

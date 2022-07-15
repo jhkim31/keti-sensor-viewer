@@ -19,8 +19,6 @@ const init_state = {
         fix_node : true,
         hide_edges : false,
         signal : false,
-        image_width: 0,
-        image_height: 0,
         floor: 1,
         floor_size: [],
         max_floor: 1

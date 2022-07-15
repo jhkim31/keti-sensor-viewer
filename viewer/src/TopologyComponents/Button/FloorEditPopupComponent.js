@@ -40,14 +40,14 @@ const FloorEditPopupComponent = () => {
     const dispatch = useDispatch();
     const selected_factory = useSelector(state => state.selected_factory);
     const floor = useSelector(state => state.topology.floor);
-    const [is_show, set_is_show] = useState(false);
+    const [popup_show, set_popup_show] = useState(false);
     const [ImageSrc, setImageSrc] = useState('');
     const [upload_file, set_upload_file] = useState({});
     const base_url = config.base_url;
 
     const popup_img_url = `${base_url}/get_image?factory=${selected_factory}&floor=${floor}&timestamp=${new Date().getTime()}`
-    const open = () => { set_is_show(true); };
-    const close = () => { set_is_show(false); };
+    const open = () => { set_popup_show(true); };
+    const close = () => { set_popup_show(false); };
 
     const encodeFileToBase64 = (fileBlob) => {
         const reader = new FileReader();
@@ -84,7 +84,6 @@ const FloorEditPopupComponent = () => {
                         floor_size: d.data
                     }
                 });
-                dispatch({type: FALSE_SIGNAL})
             }
             close();
         })
@@ -94,31 +93,19 @@ const FloorEditPopupComponent = () => {
         <WrapDiv>
             <Btn value={"도면 수정"} onClick={() => open()} />
             {
-                is_show &&
+                popup_show &&
                 <PopupBackground>
                     <PopupItem>
                         <button onClick={() => close()} style={{float:"right"}}>close</button>
                         <MapPreview url_origin={popup_img_url} url_new={ImageSrc}/>
-                        <button
-                            onClick={() => {
-                                post_file();
-                            }}
-                            style={{
-                                float:"right",
-                            }}
-                        >
-                            save
-                        </button>
-
+                        <button onClick={post_file} style={{float:"right"}}>save</button>
                         <input
                             type="file"
                             onChange={(e) => {
                                 set_upload_file(e.target.files[0]);
                                 encodeFileToBase64(e.target.files[0]);
                             }}
-                            style={{
-                                float:"right",
-                            }}
+                            style={{float:"right"}}
                         />
                     </PopupItem>
                 </PopupBackground>

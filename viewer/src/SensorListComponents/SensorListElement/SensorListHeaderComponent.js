@@ -18,18 +18,15 @@ const SensorListHeaderComponent = () => {
     const selected_factory = useSelector(state => state.selected_factory);
     return (
         <TR>
-            {
-                selected_factory && <>
+            {selected_factory && <>
                 <TableHeaderCell key="name" className="cell">node</TableHeaderCell>
                 <TableHeaderCell key="is_router" className="cell">mode</TableHeaderCell>
                 <TableHeaderCell key="last_data" className="cell">last_data</TableHeaderCell>
-                </>
-            }
-            {
-                selected_factory_useable_sensor_list.map((item) => {
-                    return <TableHeaderCell key={item}>{item}</TableHeaderCell>
-                })
-            }
+            </>}
+
+            {selected_factory_useable_sensor_list.map((item) => {
+                return <TableHeaderCell key={item}>{item}</TableHeaderCell>
+            })}
         </TR>
     );
 };

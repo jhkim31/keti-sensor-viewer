@@ -16,12 +16,7 @@ const DownFloor = () => {
             dispatch(action)
         }
     }
-    return (
-        <Btn
-            onClick={() => click()}
-            value="한층 아래로"
-        />
-    )
+    return <Btn onClick={click} value="한층 아래로"/>
 };
 
 export default DownFloor;

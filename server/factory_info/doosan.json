@@ -4,16 +4,8 @@
     "offset": 0,
     "floor": [
         {
-            "width": 1668,
-            "height": 648
-        },
-        {
-            "width": 100,
-            "height": 100
-        },
-        {
-            "width": 100,
-            "height": 100
+            "width": 1241,
+            "height": 878
         }
     ]
 }

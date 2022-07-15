@@ -2,7 +2,7 @@ import React from "react";
 import sensor_data_api from "../../API/sensor_data";
 import Btn from "../../Btn";
 import { useDispatch } from "react-redux";
-import { FALSE_SIGNAL, SET_INIT_STATE, UPDATE_DATA } from "../../reducer/store";
+import { UPDATE_DATA } from "../../reducer/store";
 
 const RefreshBtn = () => {
     const dispatch = useDispatch();
@@ -22,12 +22,7 @@ const RefreshBtn = () => {
             console.log(e)
         })
     }
-    return (
-        <Btn
-            onClick={click}
-            value="Refresh"
-        />
-    )
+    return <Btn onClick={click} value="Refresh" />
 };
 
 export default RefreshBtn;

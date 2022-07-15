@@ -12,13 +12,7 @@ const EdgesButton = () => {
             type: HIDE_EDGES_TOGGLE
         })
     }
-    return (
-        <Btn
-            bg_color={hide_edges ? "red" : undefined}
-            onClick={click}
-            value="간선 숨김"
-        />
-    )
+    return <Btn bg_color={hide_edges ? "red" : undefined} onClick={click} value="간선 숨김" />
 };
 
 export default EdgesButton;

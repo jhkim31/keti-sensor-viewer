@@ -115,6 +115,7 @@ function reducer(current_state = init_state, action) {
         }
 
       break;
+
     case RESET_SELECT_GATEWAY:
       new_state = {
         ...current_state,
@@ -138,7 +139,8 @@ function reducer(current_state = init_state, action) {
         ...current_state,
         topology: {
           ...current_state.topology,
-          floor_size: action.data.floor_size
+          floor_size: action.data.floor_size,
+          signal: false
         },
         last_timestamp: new Date().getTime()
       }

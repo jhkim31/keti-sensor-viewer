@@ -20,13 +20,14 @@ def get_image():
     image_path = f'{root_path}/{factory}/{floor}.png'
     print(os.path.exists(image_path))
     if os.path.exists(image_path):
-        return send_file(image_path, mimetype='image/png')
+        return send_file(image_path, mimetype='image/*')
     else:
         return "0"
 
 @app.route('/push_image', methods=['POST'])
 def file_upload():
     file = request.files['file']
+    print(file.content_type)
     image = Image.open(file)
     factory, floor = file.filename.split(',')
     floor = int(floor)

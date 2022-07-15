@@ -1,11 +1,11 @@
 {
-    "max_floor": 1,
+    "max_floor": 2,
     "factory": "keti-f4",
     "offset": 0,
     "floor": [
         {
-            "width": 100,
-            "height": 100
+            "width": 1280,
+            "height": 468
         },
         {
             "width": 100,

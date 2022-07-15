@@ -16,12 +16,7 @@ const UpFloor = () => {
             dispatch(action)
         }
     }
-    return (
-        <Btn
-            onClick={() => click()}
-            value="한층 위로"
-        />
-    )
+    return <Btn onClick={click} value="한층 위로" />
 };
 
 export default UpFloor;

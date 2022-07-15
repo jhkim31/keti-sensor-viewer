@@ -23,13 +23,12 @@ const MapComponent = () => {
     const signal = useSelector(state => state.topology.signal)
     const floor = useSelector(state => state.topology.floor);
     const floor_size = useSelector(state => state.topology.floor_size)
-    const selected_factory_image_width = floor_size[floor - 1]?.width ?? 0
-    const selected_factory_image_height = floor_size[floor - 1]?.height ?? 0
+    let image_width = floor_size[floor - 1]?.width ?? 0
+    let image_height = floor_size[floor - 1]?.height ?? 0
 
-
-    let resize_rate = 1000 / Math.max(selected_factory_image_width, selected_factory_image_height);
-    const image_width = selected_factory_image_width * resize_rate;
-    const image_height = selected_factory_image_height * resize_rate;
+    let resize_rate = 2000 / Math.max(image_width, image_height);
+    image_width = image_width * resize_rate;
+    image_height = image_height * resize_rate;
 
     let image = new Image();
     image.onload = () => {
@@ -94,85 +93,92 @@ const MapComponent = () => {
     node_id_list.forEach((node) => {
         const node_data = selected_factory_data[node]
         let show_node = false;
-        let mode = "";
-        let mac_addr = ""
-        let next_hop = ""
-        let node_floor = 0
-        try {
-            next_hop = node_data.data.node_info[1].info.next_hop.toUpperCase().slice(-5);
-            mac_addr = node_data.data.node_info[0].id.toUpperCase()
-            mode = node_data.data.node_info[1].info.mode;
-            node_floor = selected_factory_node_position[node].floor
-            const time_diff_m = (new Date().getTime() / 1000 - node_data.service.timestamp) / 60
+        let mode = node_data?.data?.node_info?.[1]?.info.mode ?? "";
+        let mac_addr = (node_data?.data?.node_info?.[0]?.id ?? '').toUpperCase()
+        let next_hop = (node_data?.data?.node_info?.[1]?.info?.next_hop ?? '').toUpperCase().slice(-5);
+        let node_floor = selected_factory_node_position?.[node]?.floor ?? -1
 
-            const id = mac_addr.slice(-5)
+        const time_diff_m = ((new Date().getTime() / 1000) - (node_data?.service?.timestamp ?? 0)) / 60
 
-            let color = "gray"
+        const id = mac_addr.slice(-5)
 
-            if (mode == "gateway"){
-                if (time_diff_m < config.layout.sensor_node.sensor_color_change_time[0])
-                    color = "red"
-                else if(time_diff_m < config.layout.sensor_node.sensor_color_change_time[1])
-                    color = "orange"
-                else if(time_diff_m < config.layout.sensor_node.sensor_color_change_time[2])
-                    color = "yellow"
-                else
-                    color = "#632626"
-            } else {
-                if (time_diff_m < config.layout.sensor_node.sensor_color_change_time[0])
-                    color = config.layout.sensor_node.node_color[0]
-                else if(time_diff_m < config.layout.sensor_node.sensor_color_change_time[1])
-                    color = config.layout.sensor_node.node_color[1]
-                else if(time_diff_m < config.layout.sensor_node.sensor_color_change_time[2])
-                    color = config.layout.sensor_node.node_color[2]
-                else
-                    color = config.layout.sensor_node.node_color[3]
-            }
+        let color = "gray"
 
-            if (selected_node === node)
-                color = "black"
-
-            let x = 0;
-            let y = 0;
-            if (fix_node){
-                x = -(image_width / 2) + selected_factory_node_position[node].x * image_width
-                y = -(image_height / 2) + selected_factory_node_position[node].y * image_height
-            }
-            if (node_floor === floor){
-                if (selected_gateway_node_list.length > 0){
-                    if (selected_gateway_node_list.includes(mac_addr))
-                        show_node = true
-                } else {
-                    show_node = true
-                }
-            }
-            if (show_node){
-                nodes.push({
-                    id: id,
-                    label: id,
-                    color: color,
-                    x : x,
-                    y : y,
-                })
-                edges.push({
-                    from: id,
-                    to: (id === next_hop && mode == "gateway") ? "master" : next_hop
-                })
-            }
-        } catch (e) {
+        if (mode == "gateway"){
+            if (time_diff_m < config.layout.sensor_node.sensor_color_change_time[0])
+                color = "red"
+            else if(time_diff_m < config.layout.sensor_node.sensor_color_change_time[1])
+                color = "orange"
+            else if(time_diff_m < config.layout.sensor_node.sensor_color_change_time[2])
+                color = "yellow"
+            else
+                color = "#632626"
+        } else {
+            if (time_diff_m < config.layout.sensor_node.sensor_color_change_time[0])
+                color = config.layout.sensor_node.node_color[0]
+            else if(time_diff_m < config.layout.sensor_node.sensor_color_change_time[1])
+                color = config.layout.sensor_node.node_color[1]
+            else if(time_diff_m < config.layout.sensor_node.sensor_color_change_time[2])
+                color = config.layout.sensor_node.node_color[2]
+            else
+                color = config.layout.sensor_node.node_color[3]
         }
+
+        if (selected_node === node){
+            if (mode === "gateway")
+                color = {
+                    background: "pink",
+                    border: "red",
+                    highlight: {
+                        background: "pink",
+                        border: "red"
+                    }
+                }
+            else
+                color = "pink"
+        }
+
+        let x = 0;
+        let y = 0;
+        if (fix_node){
+            x = -(image_width / 2) + selected_factory_node_position[node].x * image_width
+            y = -(image_height / 2) + selected_factory_node_position[node].y * image_height
+        }
+        if (node_floor === floor){
+            if (selected_gateway_node_list.length > 0){
+                if (selected_gateway_node_list.includes(mac_addr))
+                    show_node = true
+            } else {
+                show_node = true
+            }
+        }
+        if (show_node){
+            nodes.push({
+                id: id !== '' ? id : node,
+                label: (/^[A-F0-9]{2}:[A-F0-9]{2}$/).test(id) ? id : "error",
+                color: color,
+                x : x,
+                y : y,
+            })
+            edges.push({
+                from: id,
+                to: (id === next_hop && mode == "gateway") ? "master" : next_hop
+            })
+        }
+
     })
 
     const events = {
         click: function(event){
             if (event.nodes.length > 0){
                 const node = event.nodes[0];
-                dispatch({
-                    type: SELECT_NODE,
-                    data: {
-                        selected_node: 'floe' + node.slice(0,2) + node.slice(-2)
-                    }
-                })
+                if ((/^[A-F0-9]{2}:[A-F0-9]{2}$/).test(node))
+                    dispatch({
+                        type: SELECT_NODE,
+                        data: {
+                            selected_node: 'floe' + node.slice(0,2) + node.slice(-2)
+                        }
+                    })
             }
         },
         beforeDrawing: function () {
@@ -185,8 +191,8 @@ const MapComponent = () => {
                     ctx.lineWidth = 5;
                     ctx.strokeStyle = "red";
                     if (image.naturalWidth > 0)
-                        ctx.drawImage(image, -((selected_factory_image_width * resize_rate) / 2), -((selected_factory_image_height * resize_rate) / 2),selected_factory_image_width * resize_rate, selected_factory_image_height * resize_rate)
-                    ctx.strokeRect(-((selected_factory_image_width * resize_rate) / 2), -((selected_factory_image_height * resize_rate) / 2),selected_factory_image_width * resize_rate, selected_factory_image_height * resize_rate)
+                        ctx.drawImage(image, -(image_width / 2), -(image_height / 2), image_width, image_height)
+                    ctx.strokeRect(-(image_width / 2), -(image_height / 2), image_width, image_height)
                 } catch(e){
                     console.log(e)
                 }
@@ -203,7 +209,6 @@ const MapComponent = () => {
                     y: 1 - ((image_height / 2) - event.pointer.canvas.y) / image_height,
                     floor: floor
                 }
-
                 sensor_data_api.post(url, post_data)
                 .then(d => {
                     dispatch({
@@ -218,7 +223,7 @@ const MapComponent = () => {
     return (
         <>
             {
-                (Object.keys(selected_factory_data).length > 0) && (signal) &&
+                (Object.keys(selected_factory_data).length > 0) && signal &&
                 <Graph
                     ref={network_graph}
                     graph={graph}
