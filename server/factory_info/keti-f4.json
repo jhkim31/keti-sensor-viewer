@@ -1,5 +1,15 @@
 {
-    "width": 1492,
-    "height": 466,
-    "factory": "keti-f4"
+    "max_floor": 1,
+    "factory": "keti-f4",
+    "offset": 0,
+    "floor": [
+        {
+            "width": 100,
+            "height": 100
+        },
+        {
+            "width": 100,
+            "height": 100
+        }
+    ]
 }

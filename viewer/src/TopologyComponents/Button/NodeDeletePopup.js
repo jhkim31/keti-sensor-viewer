@@ -34,10 +34,12 @@ const WrapDiv = styled.div`
 const NodeDeletePopup = () => {
     const dispatch = useDispatch();
 
-    const selected_factory_node_list = useSelector((state) => state.selected_factory_node_list)
+    const selected_factory_node_position = useSelector(state => state.selected_factory_node_position)
     const visulazation_sensor_list = useSelector((state) => Object.keys(state.selected_factory_node_position))
-    const non_visulazation_sensor_list = selected_factory_node_list.filter(x => !visulazation_sensor_list.includes(x));
     const selected_factory = useSelector(state => state.selected_factory);
+    const floor = useSelector(state => state.topology.floor)
+    debugger;
+    const current_floor_nodes = visulazation_sensor_list.filter(node => selected_factory_node_position[node].floor ===floor)
 
     const [is_show, set_is_show] = useState(false);
 
@@ -84,7 +86,7 @@ const NodeDeletePopup = () => {
                                 float:"right",
                             }}
                         >close</button>
-                        {visulazation_sensor_list.map(item => {
+                        {current_floor_nodes.map(item => {
                             return(
                                 <div
                                 key={item}

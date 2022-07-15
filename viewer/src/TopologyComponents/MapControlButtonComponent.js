@@ -10,6 +10,7 @@ import UpFloor from "./Button/UpFloor";
 import DownFloor from "./Button/DownFloor";
 import { useSelector } from "react-redux";
 import AddFloor from "./Button/AddFloor";
+import DeleteFloor from "./Button/DeleteFloor";
 
 
 const BtnSpace = styled.div`
@@ -28,9 +29,10 @@ const MapControlButtonComponent = () => {
                 <FloorEditPopupComponent/>
                 <NodeAddPopup />
                 <NodeDeletePopup/>
-                <AddFloor/>
                 <UpFloor/>
                 <DownFloor/>
+                <AddFloor/>
+                <DeleteFloor/>
                 <RefreshBtn/>
                 <FixedButton/>
                 <EdgesButton/>

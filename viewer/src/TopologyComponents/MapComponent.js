@@ -17,12 +17,15 @@ const MapComponent = () => {
     const last_timestamp = useSelector(state => state.last_timestamp);
     const network_graph = useRef(null);
     const base_url = config.base_url;
-    const selected_factory_image_width = useSelector(state => state.topology.image_width)
-    const selected_factory_image_height = useSelector(state => state.topology.image_height)
+
     const fix_node = useSelector(state => state.topology.fix_node)
-    const show_edges = useSelector(state => state.topology.show_edges)
+    const hide_edges = useSelector(state => state.topology.hide_edges)
     const signal = useSelector(state => state.topology.signal)
     const floor = useSelector(state => state.topology.floor);
+    const floor_size = useSelector(state => state.topology.floor_size)
+    const selected_factory_image_width = floor_size[floor - 1]?.width ?? 0
+    const selected_factory_image_height = floor_size[floor - 1]?.height ?? 0
+
 
     let resize_rate = 1000 / Math.max(selected_factory_image_width, selected_factory_image_height);
     const image_width = selected_factory_image_width * resize_rate;
@@ -34,7 +37,6 @@ const MapComponent = () => {
     }
     image.src = `${base_url}/get_image?factory=${selected_factory}&floor=${floor}&last_timestamp=${last_timestamp}`;
 
-
     let nodes = []
     let edges = []
     const graph = {
@@ -42,10 +44,18 @@ const MapComponent = () => {
         edges: edges
     }
 
-
+    nodes.push({
+        id : "floor",
+        label : `${floor}층`,
+        color: "black",
+        size: 40,
+        x : -(image_width / 2),
+        y : -(image_height / 2),
+        fixed: true
+    })
     nodes.push({
         id: "master",
-        label: "Internet AP",
+        label: `Internet AP`,
         color: "purple",
         x : 0,
         y : 0,
@@ -65,7 +75,7 @@ const MapComponent = () => {
             }
         },
         edges: {
-            hidden: !show_edges,
+            hidden: hide_edges,
             arrows: {
                 to: true,
                 from: false
@@ -87,10 +97,12 @@ const MapComponent = () => {
         let mode = "";
         let mac_addr = ""
         let next_hop = ""
+        let node_floor = 0
         try {
             next_hop = node_data.data.node_info[1].info.next_hop.toUpperCase().slice(-5);
             mac_addr = node_data.data.node_info[0].id.toUpperCase()
             mode = node_data.data.node_info[1].info.mode;
+            node_floor = selected_factory_node_position[node].floor
             const time_diff_m = (new Date().getTime() / 1000 - node_data.service.timestamp) / 60
 
             const id = mac_addr.slice(-5)
@@ -126,11 +138,13 @@ const MapComponent = () => {
                 x = -(image_width / 2) + selected_factory_node_position[node].x * image_width
                 y = -(image_height / 2) + selected_factory_node_position[node].y * image_height
             }
-            if (selected_gateway_node_list.length > 0){
-                if (selected_gateway_node_list.includes(mac_addr))
+            if (node_floor === floor){
+                if (selected_gateway_node_list.length > 0){
+                    if (selected_gateway_node_list.includes(mac_addr))
+                        show_node = true
+                } else {
                     show_node = true
-            } else {
-                show_node = true
+                }
             }
             if (show_node){
                 nodes.push({
@@ -173,7 +187,6 @@ const MapComponent = () => {
                     if (image.naturalWidth > 0)
                         ctx.drawImage(image, -((selected_factory_image_width * resize_rate) / 2), -((selected_factory_image_height * resize_rate) / 2),selected_factory_image_width * resize_rate, selected_factory_image_height * resize_rate)
                     ctx.strokeRect(-((selected_factory_image_width * resize_rate) / 2), -((selected_factory_image_height * resize_rate) / 2),selected_factory_image_width * resize_rate, selected_factory_image_height * resize_rate)
-
                 } catch(e){
                     console.log(e)
                 }
@@ -188,7 +201,7 @@ const MapComponent = () => {
                     sensor_id: 'floe' + node.slice(0,2) + node.slice(-2),
                     x: 1 - ((image_width / 2) - event.pointer.canvas.x) / image_width,
                     y: 1 - ((image_height / 2) - event.pointer.canvas.y) / image_height,
-                    floor: 1
+                    floor: floor
                 }
 
                 sensor_data_api.post(url, post_data)
@@ -205,8 +218,7 @@ const MapComponent = () => {
     return (
         <>
             {
-                (
-                Object.keys(selected_factory_data).length > 0) && (signal || image.naturalWidth == 0) &&
+                (Object.keys(selected_factory_data).length > 0) && (signal) &&
                 <Graph
                     ref={network_graph}
                     graph={graph}

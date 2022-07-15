@@ -17,12 +17,13 @@ const init_state = {
 
     topology: {
         fix_node : true,
-        show_edges : true,
+        hide_edges : false,
         signal : false,
         image_width: 0,
         image_height: 0,
         floor: 1,
-        max_floor: 3
+        floor_size: [],
+        max_floor: 1
     },
 
     last_update_time : "",

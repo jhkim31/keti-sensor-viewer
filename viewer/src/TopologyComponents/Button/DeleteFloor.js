@@ -2,18 +2,18 @@ import React from "react";
 import sensor_data_api from "../../API/sensor_data";
 import Btn from "../../Btn";
 import { useDispatch, useSelector } from "react-redux";
-import { ADD_FLOOR } from "../../reducer/store";
+import { DELETE_FLOOR } from "../../reducer/store";
 
-const AddFloor = () => {
+const DeleteFloor = () => {
     const dispatch = useDispatch();
     const selected_factory = useSelector(state => state.selected_factory);
     function click(){
-        const url = `/add-floor?factory=${selected_factory}`
+        const url = `/delete-floor?factory=${selected_factory}`
         sensor_data_api.post(url)
         .then(d => {
             console.log(d.data)
             dispatch({
-                type: ADD_FLOOR,
+                type: DELETE_FLOOR,
                 data: {
                     floor: d.data.max_floor,
                     max_floor: d.data.max_floor,
@@ -25,9 +25,9 @@ const AddFloor = () => {
     return (
         <Btn
             onClick={click}
-            value="층 추가"
+            value="맨 위층 삭제"
         />
     )
 };
 
-export default AddFloor;
+export default DeleteFloor;

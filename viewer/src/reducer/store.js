@@ -11,9 +11,10 @@ const DOWN_STAIR = "DOWN_STAIR"
 const UP_STAIR = "UP_STAIR"
 const MOVE_NODE = "MOVE_NODE"
 const ADD_FLOOR = "ADD_FLOOR"
+const DELETE_FLOOR = "DELETE_FLOOR"
 const UPDATE_IMAGE_SIZE = "UPDATE_IMAGE_SIZE"
 const NODE_FIX_TOGGLE = "NODE_FIX_TOGGLE"
-const SHOW_EDGES_TOGGLE = "SHOW_EDGES_TOGGLE"
+const HIDE_EDGES_TOGGLE = "HIDE_EDGES_TOGGLE"
 const TRUE_SIGNAL = "TRUE_SIGNAL"
 const FALSE_SIGNAL = "FALSE_SIGNAL"
 const RESET_SELECT_GATEWAY = "RESET_SELECT_GATEWAY"
@@ -34,7 +35,6 @@ function reducer(current_state = init_state, action) {
         last_update_time: new Date().toString(),
         last_timestamp: new Date().getTime()
       }
-
       break;
 
     case UPDATE_DATA:
@@ -74,13 +74,14 @@ function reducer(current_state = init_state, action) {
         selected_factory_node_position: action.data.sensor_position,
         selected_factory_gateway_list: Object.keys(current_state.nodes_group_by_factory_gateway[action.data.factory_info.factory]),
         selected_factory_data: current_state.all_factory_data[action.data.factory_info.factory],
-        selected_gateway_node_list : [],
+        selected_gateway_node_list: [],
 
         topology: {
           ...current_state.topology,
-          image_width: action.data.factory_info.width,
-          image_height: action.data.factory_info.height,
+          floor_size: action.data.factory_info.floor,
           signal: false,
+          max_floor: action.data.factory_info.max_floor,
+          floor: 1,
         },
       }
 
@@ -113,14 +114,14 @@ function reducer(current_state = init_state, action) {
           selected_gateway: gateway
         }
 
-        break;
-      case RESET_SELECT_GATEWAY:
-        new_state = {
-          ...current_state,
-          selected_gateway_node_list: [],
-          selected_gateway: ""
-        }
-        break;
+      break;
+    case RESET_SELECT_GATEWAY:
+      new_state = {
+        ...current_state,
+        selected_gateway_node_list: [],
+        selected_gateway: ""
+      }
+      break;
 
     case MOVE_NODE:
       new_state = {
@@ -137,61 +138,76 @@ function reducer(current_state = init_state, action) {
         ...current_state,
         topology: {
           ...current_state.topology,
-          image_width : action.data.width,
-          image_height: action.data.height,
+          floor_size: action.data.floor_size
         },
         last_timestamp: new Date().getTime()
       }
 
       break;
+
     case UP_STAIR:
-      if (current_state.topology.floor + 1 <= current_state.topology.max_floor){
-        new_state = {
-          ...current_state,
-          topology: {
-            ...current_state.topology,
-            floor: current_state.topology.floor + 1
-          }
-        }
-      } else {
-        new_state = {
-          ...current_state
+      new_state = {
+        ...current_state,
+        topology: {
+          ...current_state.topology,
+          floor: current_state.topology.floor + 1,
+          signal: false,
         }
       }
       break;
 
     case DOWN_STAIR:
-      if (current_state.topology.floor - 1 >= 1){
+      new_state = {
+        ...current_state,
+        topology: {
+          ...current_state.topology,
+          floor: current_state.topology.floor - 1,
+          signal: false,
+        }
+      }
+      break;
+
+    case ADD_FLOOR:
+      new_state = {
+        ...current_state,
+        topology: {
+          ...current_state.topology,
+          floor: action.data.floor,
+          max_floor: action.data.max_floor,
+          floor_size: action.data.floor_size
+        }
+
+      }
+      break;
+
+    case DELETE_FLOOR:
         new_state = {
           ...current_state,
           topology: {
             ...current_state.topology,
-            floor: current_state.topology.floor - 1
+            floor: action.data.floor,
+            max_floor: action.data.max_floor,
+            floor_size: action.data.floor_size
           }
         }
-      } else {
-        new_state = {
-          ...current_state
-        }
-      }
-      break;
+        break;
 
     case NODE_FIX_TOGGLE:
       new_state = {
         ...current_state,
         topology: {
           ...current_state.topology,
-          fix_node : !current_state.topology.fix_node
+          fix_node: !current_state.topology.fix_node
         }
       }
 
       break;
-    case SHOW_EDGES_TOGGLE:
+    case HIDE_EDGES_TOGGLE:
       new_state = {
         ...current_state,
         topology: {
           ...current_state.topology,
-          show_edges : !current_state.topology.show_edges
+          hide_edges: !current_state.topology.hide_edges
         }
       }
 
@@ -202,7 +218,7 @@ function reducer(current_state = init_state, action) {
         ...current_state,
         topology: {
           ...current_state.topology,
-          signal : false
+          signal: false
         }
       }
 
@@ -236,11 +252,12 @@ export {
   MOVE_NODE,
   UPDATE_IMAGE_SIZE,
   NODE_FIX_TOGGLE,
-  SHOW_EDGES_TOGGLE,
+  HIDE_EDGES_TOGGLE,
   TRUE_SIGNAL,
   FALSE_SIGNAL,
   UPDATE_DATA,
   RESET_SELECT_GATEWAY,
-  ADD_FLOOR
+  ADD_FLOOR,
+  DELETE_FLOOR
 }
 

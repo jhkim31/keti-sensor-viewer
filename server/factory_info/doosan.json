@@ -1,5 +1,19 @@
 {
-    "width": 261,
-    "height": 193,
-    "factory": "doosan"
+    "max_floor": 1,
+    "factory": "doosan",
+    "offset": 0,
+    "floor": [
+        {
+            "width": 1668,
+            "height": 648
+        },
+        {
+            "width": 100,
+            "height": 100
+        },
+        {
+            "width": 100,
+            "height": 100
+        }
+    ]
 }

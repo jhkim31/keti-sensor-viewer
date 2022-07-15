@@ -22,6 +22,7 @@ const InfoComponent = ({set_show_sidebar}) => {
     const selected_factory = useSelector(state => state.selected_factory );
     const selected_node = useSelector(state => state.selected_node);
     const floor = useSelector(state => state.topology.floor);
+    const max_floor = useSelector(state => state.topology.max_floor);
 
     function toggle_sidebar() {
         set_show_sidebar((visible) => {
@@ -38,7 +39,7 @@ const InfoComponent = ({set_show_sidebar}) => {
                 !is_mobile && <div>
                     <h1>selected factory : {selected_factory}</h1>
                     <h2>select sensor : {selected_node}</h2>
-                    <h3>floor : {floor}</h3>
+                    {selected_factory && <h3>{max_floor}층 중 {floor}층</h3>}
                 </div>
             }
             {
@@ -46,7 +47,7 @@ const InfoComponent = ({set_show_sidebar}) => {
                     <Hbutton onClick={toggle_sidebar}>show factory</Hbutton>
                     <h3>selected factory : {selected_factory}</h3>
                     <h4>select sensor : {selected_node}</h4>
-                    <h6>floor : {floor}</h6>
+                    <h6>{max_floor}층 중 {floor}층</h6>
                 </div>
             }
 

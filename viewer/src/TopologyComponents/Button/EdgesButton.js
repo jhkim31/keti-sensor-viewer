@@ -1,23 +1,23 @@
 import React from "react";
 import Btn from "../../Btn";
 import { useDispatch, useSelector } from "react-redux";
-import { SHOW_EDGES_TOGGLE } from "../../reducer/store";
+import { HIDE_EDGES_TOGGLE } from "../../reducer/store";
 
 
-const EdgesButton = () => {    
+const EdgesButton = () => {
     const dispatch = useDispatch();
-    const show_edges = useSelector(state => state.topology.show_edges);
+    const hide_edges = useSelector(state => state.topology.hide_edges);
     function click () {
         dispatch({
-            type: SHOW_EDGES_TOGGLE            
+            type: HIDE_EDGES_TOGGLE
         })
     }
     return (
         <Btn
-            bg_color={show_edges ? "red" : undefined}
+            bg_color={hide_edges ? "red" : undefined}
             onClick={click}
-            value="Show Edges"
-        />        
+            value="간선 숨김"
+        />
     )
 };
 

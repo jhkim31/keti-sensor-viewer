@@ -35,6 +35,7 @@ const NodeAddPopup = () => {
     const dispatch = useDispatch();
     const selected_factory_node_list = useSelector((state) => state.selected_factory_node_list)
     const visulazation_sensor_list = useSelector((state) => Object.keys(state.selected_factory_node_position))
+    const floor =  useSelector(state => state.topology.floor)
     const non_visulazation_sensor_list = selected_factory_node_list.filter(x => !visulazation_sensor_list.includes(x));
 
     const selected_factory = useSelector(state => state.selected_factory);
@@ -47,6 +48,7 @@ const NodeAddPopup = () => {
         const post_data = {
             factory: selected_factory,
             sensor_id: sensor_id,
+            floor: floor
         };
 
         const url = "/add_node_position";

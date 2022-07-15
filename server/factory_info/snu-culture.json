@@ -1,5 +1,19 @@
 {
-    "width": 1000,
-    "height": 1000,
-    "factory": "snu-culture"
+    "max_floor": 3,
+    "factory": "snu-culture",
+    "offset": 0,
+    "floor": [
+        {
+            "width": 100,
+            "height": 100
+        },
+        {
+            "width": 100,
+            "height": 100
+        },
+        {
+            "width": 100,
+            "height": 100
+        }
+    ]
 }

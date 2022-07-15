@@ -34,6 +34,7 @@ const MapPreview = styled.div`
     width:80%;
     height:80%;
     background: no-repeat center/80% url(${props => props.url_new == '' ? props.url_origin : props.url_new });
+    background-size: contain;
 `
 const FloorEditPopupComponent = () => {
     const dispatch = useDispatch();
@@ -80,8 +81,7 @@ const FloorEditPopupComponent = () => {
                 dispatch({
                     type: UPDATE_IMAGE_SIZE,
                     data: {
-                        width : d.data.width,
-                        height : d.data.height,
+                        floor_size: d.data
                     }
                 });
                 dispatch({type: FALSE_SIGNAL})
@@ -92,7 +92,7 @@ const FloorEditPopupComponent = () => {
 
     return (
         <WrapDiv>
-            <Btn value={"Map Edit"} onClick={() => open()} />
+            <Btn value={"도면 수정"} onClick={() => open()} />
             {
                 is_show &&
                 <PopupBackground>

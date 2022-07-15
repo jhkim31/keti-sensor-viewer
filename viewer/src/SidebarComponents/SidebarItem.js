@@ -30,6 +30,7 @@ const SidebarItem = ({
     const dispatch = useDispatch()
     const is_mobile = useMediaQuery({ maxDeviceWidth: 1199 })
     const selected_factory = useSelector((state) => state.selected_factory)
+    const floor = useSelector(state => state.topology.floor)
     return (
         <SidebarItemLi
             selected_factory={selected_factory}
@@ -37,9 +38,10 @@ const SidebarItem = ({
             onClick={() => {
                 if (is_mobile)
                     set_show_sidebar(false);
-                const url = `/get-factory-data?factory=${factory_name}`;
+                const url = `/get-factory-data?factory=${factory_name}&floor=${floor}`;
                 sensor_data_api.get(url)
                 .then(d => {
+                    console.log(d.data)
                     if (d.status == 200){
                         dispatch({
                             type: SELECT_FACTORY,
