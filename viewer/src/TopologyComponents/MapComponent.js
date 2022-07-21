@@ -138,12 +138,6 @@ const MapComponent = () => {
                 color = "pink"
         }
 
-        let x = 0;
-        let y = 0;
-        if (fix_node){
-            x = -(image_width / 2) + selected_factory_node_position[node].x * image_width
-            y = -(image_height / 2) + selected_factory_node_position[node].y * image_height
-        }
         if (node_floor === floor){
             if (selected_gateway_node_list.length > 0){
                 if (selected_gateway_node_list.includes(mac_addr))
@@ -153,6 +147,12 @@ const MapComponent = () => {
             }
         }
         if (show_node){
+            let x = 0;
+            let y = 0;
+            if (fix_node){
+                x = -(image_width / 2) + (selected_factory_node_position?.[node]?.x ?? 0) * image_width
+                y = -(image_height / 2) + (selected_factory_node_position?.[node]?.y ?? 0) * image_height
+            }
             nodes.push({
                 id: id !== '' ? id : node,
                 label: (/^[A-F0-9]{2}:[A-F0-9]{2}$/).test(id) ? id : "error",

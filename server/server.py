@@ -1,6 +1,7 @@
+from re import template
 from flask_restx import Resource, Api
 from flask_cors import CORS
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, render_template, request, jsonify, send_file
 
 import json
 import requests
@@ -9,8 +10,13 @@ import pandas as pd
 import numpy as np
 from PIL import Image
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='./build/static/', template_folder='./build')
 CORS(app)
+
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 @app.route('/get_image')
 def get_image():
@@ -49,7 +55,6 @@ def file_upload():
     except Exception as e:
         print(e)
         return "0"
-
 
 @app.route('/test')
 def test():
@@ -198,6 +203,5 @@ def delete_node():
         return_data['sensor_position'][i[2]] = {'x' : i[3], 'y' : i[4], 'floor' : i[5]}
     print(return_data)
     return return_data
-
 
 app.run(host="0.0.0.0")

@@ -6,6 +6,7 @@ import Btn from "../Btn";
 import { config } from "../config";
 import { useSelector, useDispatch } from "react-redux";
 import { SELECT_GATEWAY, RESET_SELECT_GATEWAY } from "../reducer/store";
+import { useTable } from 'react-table'
 
 
 const TableContainer = styled.div`
@@ -16,6 +17,7 @@ const TableContainer = styled.div`
 const SensorListTable = styled.table`
     width:100%;
 `
+
 const GatewayWrapper = styled.div`
     ${(props) => "width:" + props.size + 'px;'}
     background:${config.layout.theme_color};
@@ -32,9 +34,12 @@ const SensorListComponent = () => {
     const selected_gateway = useSelector(state => state.selected_gateway)
     const selected_gateway_node_list = useSelector(state => state.selected_gateway_node_list)
 
+
+    const selected_factory_useable_sensor_list = useSelector(state => state.selected_factory_useable_sensor_list)
+
     const nodes = Object.keys(selected_factory_data)
 
-    function gateway_click_func(gateway){
+    function gateway_click_func(gateway) {
         if ((/^[A-F0-9]{2}(:[A-F0-9]{2}){5}$/).test(gateway))
             dispatch({
                 type: SELECT_GATEWAY,
@@ -43,6 +48,56 @@ const SensorListComponent = () => {
                 }
             })
     }
+
+    const data = React.useMemo(
+        () => {
+            let tmp = []
+
+            Object.keys(selected_factory_data).forEach(node => {
+                let tmp2 = {};
+                tmp2['node'] = node
+                tmp2['mode'] = selected_factory_data?.[node]?.data?.node_info?.[1]?.info?.mode ?? ''
+                const sensors = selected_factory_data?.[node]?.data?.sensors ?? {}
+                Object.keys(sensors).forEach(sensor => {
+                    tmp2[sensor] = sensors[sensor].value
+                })
+                tmp.push(tmp2)
+            })
+            return tmp;
+        }, [selected_factory_data]
+    )
+
+    const columns = React.useMemo(
+        () => {
+            let tmp = []
+            tmp.push({
+                Header: "node",
+                accessor: "node",
+                width: 200,
+            })
+            tmp.push({
+                Header: "mode",
+                accessor: "mode",
+                width: 200
+            })
+            selected_factory_useable_sensor_list.forEach(d => {
+                tmp.push({
+                    Header: d,
+                    accessor: d,
+                    width: 200,
+                })
+            })
+            return tmp
+        }, [selected_factory_useable_sensor_list]
+    )
+
+    const {
+        getTableProps,
+        getTableBodyProps,
+        headerGroups,
+        rows,
+        prepareRow,
+    } = useTable({ columns, data })
 
     return (
         <div>
@@ -63,7 +118,6 @@ const SensorListComponent = () => {
                     )
                 })}
             </GatewayWrapper>
-
             <TableContainer size={(num_useable_sensors) * 120}>
                 <SensorListTable>
                     <thead>
@@ -89,6 +143,7 @@ const SensorListComponent = () => {
                     </tbody>
                 </SensorListTable>
             </TableContainer>
+
         </div>
     );
 };

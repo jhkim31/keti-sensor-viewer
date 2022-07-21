@@ -25,7 +25,7 @@ const SensorListRowComponent = ({
         const selected_node = useSelector(state => state.selected_node);
         const useable_sensor_list = useSelector(state => state.selected_factory_useable_sensor_list)
         const node_data = useSelector(state => state.selected_factory_data[node_id])
-        const sensor_data = node_data?.data.sensors;
+        const sensors_data = node_data?.data.sensors;
         const last_update_time = useSelector(state => state.last_update_time);
 
         const end_time = new Date((node_data?.service?.timestamp ?? 0) * 1000)
@@ -69,7 +69,7 @@ const SensorListRowComponent = ({
                 {last_data_time_str}
             </TableCell>
             {useable_sensor_list.map((item) => {
-                let value = sensor_data[item]?.value ?? '';
+                let value = sensors_data[item]?.value ?? '';
                 if (value !== '' && !Number.isInteger(value))
                     value = value.toFixed(5);
                 return <TableCell key={row_index + "_" + item}>{value}</TableCell>

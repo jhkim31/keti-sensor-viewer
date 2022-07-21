@@ -1,7 +1,5 @@
 export const config = {
-    // "base_url" : "http://172.20.10.14:5000/"    ,
-    "base_url" : "http://192.168.101.237:5000",
-    // "base_url" : "http://localhost:5000",
+    "base_url" : "http://localhost:5000",
     "layout" : {
         "row" : "90px 400px 1fr",
         "col" : "200px 1fr",
