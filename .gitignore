@@ -9,6 +9,9 @@
 .vscode
 **/package-lock.json
 **/__pycache__
+**/build/**
+server/factory/**
+server/factory_info/**
 
 # Icon must end with two \r
 Icon

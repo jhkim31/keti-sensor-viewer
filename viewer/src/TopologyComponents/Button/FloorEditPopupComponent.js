@@ -13,7 +13,7 @@ const PopupItem = styled.div`
     left:25%;
     top:20%;
     width:50%;
-    height:30%;    
+    height:30%;
 `
 
 const PopupBackground = styled.div`
@@ -30,22 +30,24 @@ const WrapDiv = styled.div`
     display:inline-block;
 `
 
-const MapPreview = styled.div`    
+const MapPreview = styled.div`
     width:80%;
     height:80%;
-    background: no-repeat center/80% url(${props => props.url_new == '' ? props.url_origin : props.url_new });  
+    background: no-repeat center/80% url(${props => props.url_new == '' ? props.url_origin : props.url_new });
+    background-size: contain;
 `
 const FloorEditPopupComponent = () => {
     const dispatch = useDispatch();
     const selected_factory = useSelector(state => state.selected_factory);
-    const [is_show, set_is_show] = useState(false);
-    const [ImageSrc, setImageSrc] = useState('');    
+    const floor = useSelector(state => state.topology.floor);
+    const [popup_show, set_popup_show] = useState(false);
+    const [ImageSrc, setImageSrc] = useState('');
     const [upload_file, set_upload_file] = useState({});
     const base_url = config.base_url;
 
-    const popup_img_url = `${base_url}/get_image?factory=${selected_factory}&floor=0&timestamp=${new Date().getTime()}`       
-    const open = () => { set_is_show(true); };
-    const close = () => { set_is_show(false); };    
+    const popup_img_url = `${base_url}/get_image?factory=${selected_factory}&floor=${floor}&timestamp=${new Date().getTime()}`
+    const open = () => { set_popup_show(true); };
+    const close = () => { set_popup_show(false); };
 
     const encodeFileToBase64 = (fileBlob) => {
         const reader = new FileReader();
@@ -65,64 +67,50 @@ const FloorEditPopupComponent = () => {
         formData.append(
             'file',
             upload_file,
-            `${selected_factory},${0}`
+            `${selected_factory},${floor}`
         );
         const config = {
             headers: {
                 "content-type": "multipart/form-data"
             }
         };
-        sensor_data_api.post(url, formData, config)      
+        sensor_data_api.post(url, formData, config)
         .then(d => {
             if (d.status == 200){
                 setImageSrc('');
                 dispatch({
                     type: UPDATE_IMAGE_SIZE,
                     data: {
-                        width : d.data.width,
-                        height : d.data.height,                                                
+                        floor_size: d.data
                     }
                 });
-                dispatch({type: FALSE_SIGNAL})                
             }
-            close();    
-        })  
+            close();
+        })
     }
-    
+
     return (
         <WrapDiv>
-            <Btn value={"Map Edit"} onClick={() => open()} />                                   
-            {           
-                is_show && 
+            <Btn value={"도면 수정"} onClick={() => open()} />
+            {
+                popup_show &&
                 <PopupBackground>
                     <PopupItem>
-                        <button onClick={() => close()} style={{float:"right"}}>close</button>                        
-                        <MapPreview url_origin={popup_img_url} url_new={ImageSrc}/>                                                                                                                            
-                        <button
-                            onClick={() => {                                
-                                post_file();                                                            
-                            }}
-                            style={{
-                                float:"right",
-                            }}
-                        >
-                            save
-                        </button>   
-
-                        <input 
+                        <button onClick={() => close()} style={{float:"right"}}>close</button>
+                        <MapPreview url_origin={popup_img_url} url_new={ImageSrc}/>
+                        <button onClick={post_file} style={{float:"right"}}>save</button>
+                        <input
                             type="file"
                             onChange={(e) => {
                                 set_upload_file(e.target.files[0]);
                                 encodeFileToBase64(e.target.files[0]);
                             }}
-                            style={{
-                                float:"right",
-                            }}
-                        />                                                  
-                    </PopupItem>     
-                </PopupBackground>           
+                            style={{float:"right"}}
+                        />
+                    </PopupItem>
+                </PopupBackground>
             }
-        </WrapDiv>    
+        </WrapDiv>
     )
 };
 

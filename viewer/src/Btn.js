@@ -20,10 +20,10 @@ const Btn_Style = styled.div`
         background-color: ${config.layout.button.hover_bg_color};
         color: ${config.layout.button.hover_color};
     }
-    cursor:${config.layout.button.cursor};
+    user-select: none;
 `
 
-const Btn = ({    
+const Btn = ({
     value,
     onClick,
     bg_color,

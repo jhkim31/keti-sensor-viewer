@@ -4,16 +4,16 @@ import MapControlButtonComponent from "./MapControlButtonComponent";
 import MapComponent from "./MapComponent";
 
 
-const WrapperDIV = styled.div`    
-    height:100%;    
-    overflow:hidden;        
+const WrapperDIV = styled.div`
+    height:100%;
+    overflow:hidden;
 `
 
-const TopologyComponent = () => {                
+const TopologyComponent = () => {
     return (
-        <WrapperDIV>            
-            <MapControlButtonComponent/> 
-            <MapComponent/>             
+        <WrapperDIV>
+            <MapControlButtonComponent/>
+            <MapComponent/>
         </WrapperDIV>
     );
 };

@@ -6,22 +6,33 @@ import NodeAddPopup from "./Button/NodeAddPopup";
 import NodeDeletePopup from "./Button/NodeDeletePopup";
 import RefreshBtn from "./Button/RefreshBtn";
 import EdgesButton from './Button/EdgesButton'
+import UpFloor from "./Button/UpFloor";
+import DownFloor from "./Button/DownFloor";
 import { useSelector } from "react-redux";
+import AddFloor from "./Button/AddFloor";
+import DeleteFloor from "./Button/DeleteFloor";
 
 
 const BtnSpace = styled.div`
-    height: 40px;    
+    "width:${window.width- 200}";
+    white-space: nowrap;
+    overflow: scroll;
+    height: 40px;
 `
 
-const MapControlButtonComponent = () => {            
+const MapControlButtonComponent = () => {
     const selected_factory = useSelector(state => state.selected_factory)
     return (
         <>
-            { 
-            selected_factory && <BtnSpace>            
+            {
+            selected_factory && <BtnSpace>
                 <FloorEditPopupComponent/>
-                <NodeAddPopup />                                        
+                <NodeAddPopup />
                 <NodeDeletePopup/>
+                <UpFloor/>
+                <DownFloor/>
+                <AddFloor/>
+                <DeleteFloor/>
                 <RefreshBtn/>
                 <FixedButton/>
                 <EdgesButton/>

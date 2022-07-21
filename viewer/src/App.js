@@ -16,7 +16,7 @@ const Wrapper = styled.div`
     display: grid;
     height: 100%;
     grid-template-rows: ${config.layout.row};
-    grid-template-columns: ${config.layout.col};    
+    grid-template-columns: ${config.layout.col};
     grid-template-areas:
         "info_component info_component"
         "sidebar map "
@@ -27,25 +27,25 @@ const Mobile_Wrapper = styled.div`
     display: grid;
     height: 100%;
     grid-template-rows: ${config.mobile_layout.row};
-    grid-template-columns: ${config.mobile_layout.col};    
+    grid-template-columns: ${config.mobile_layout.col};
     grid-template-areas:
         "info_component"
         "map"
         "sensorlist";
 `
 
-const LayoutSidebar = styled.div`  
-    grid-area: sidebar;    
+const LayoutSidebar = styled.div`
+    grid-area: sidebar;
     border:${config.layout.border};
     color:red;
     background:${config.layout.theme_color};
 `
 
-const Mobile_LayoutSidebar = styled.div`  
+const Mobile_LayoutSidebar = styled.div`
     position:fixed;
     top:0;
     left:0;
-    visibility:${props => props.show ? "visible" : "hidden"};        
+    visibility:${props => props.show ? "visible" : "hidden"};
     width:200px;
     height:100%;
     border:${config.layout.border};
@@ -54,7 +54,7 @@ const Mobile_LayoutSidebar = styled.div`
 `
 
 const LayoutTopology = styled.div`
-    grid-area: map;        
+    grid-area: map;
     color:white;
     background:white;
 `
@@ -66,35 +66,35 @@ const LayoutSensorList = styled.div`
     background:${config.layout.theme_color};
 `
 
-const App = () => {            
+const App = () => {
     const dispatch = useDispatch();
-    useEffect(() => {                
+    useEffect(() => {
         const url = '/all-sensor-data'
         sensor_data_api.get(url)
         .then(d => {
-            if (d.status == 200){                
+            if (d.status == 200){
                 dispatch({
                     type: SET_INIT_STATE,
-                    data: d.data                    
+                    data: d.data
                 })
             }
         })
         .catch(e => {
             console.log(e)
-        })                
-    }, [])      
+        })
+    }, [])
 
     const is_mobile = useMediaQuery({ maxDeviceWidth: 1199 })
     const [show_sidebar, set_show_sidebar] = useState(false)
-    
-    return (                  
+
+    return (
         <>
         {
-            !is_mobile && 
+            !is_mobile &&
             <Wrapper>
-                <InfoComponent/>              
+                <InfoComponent/>
                 <LayoutSidebar>
-                    <SidebarComponent/>                                 
+                    <SidebarComponent/>
                 </LayoutSidebar>
                 <LayoutTopology>
                     <TopologyComponent/>
@@ -102,24 +102,24 @@ const App = () => {
                 <LayoutSensorList>
                     <SensorListComponent/>
                 </LayoutSensorList>
-            </Wrapper>                    
+            </Wrapper>
         }
         {
-            is_mobile && 
+            is_mobile &&
             <>
             <Mobile_Wrapper>
-                <InfoComponent set_show_sidebar = {set_show_sidebar} />                
+                <InfoComponent set_show_sidebar = {set_show_sidebar} />
                 <TopologyComponent/>
                 <LayoutSensorList>
                     <SensorListComponent/>
-                </LayoutSensorList>                
-            </Mobile_Wrapper>      
+                </LayoutSensorList>
+            </Mobile_Wrapper>
             <Mobile_LayoutSidebar  show={show_sidebar}>
-                <SidebarComponent set_show_sidebar = {set_show_sidebar}  />                                 
-            </Mobile_LayoutSidebar>                                               
+                <SidebarComponent set_show_sidebar = {set_show_sidebar}  />
+            </Mobile_LayoutSidebar>
             </>
         }
-        </>  
+        </>
     );
 };
 export default App;
